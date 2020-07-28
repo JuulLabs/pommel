@@ -1,0 +1,20 @@
+apply plugin: 'java-library'
+apply plugin: 'org.jetbrains.kotlin.jvm'
+apply plugin: 'org.jetbrains.kotlin.kapt'
+apply plugin: 'org.jmailen.kotlinter'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+dependencies {
+    implementation project(':pommel-annotations')
+    implementation deps.javaPoet
+
+    implementation deps.kotlin
+
+    compileOnly deps.autoService
+    kapt deps.autoService
+
+    compileOnly deps.incap.runtime
+    kapt deps.incap.processor
+}
