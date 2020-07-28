@@ -7,7 +7,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
-    implementation project(':pommel-annotations')
+    implementation project(':annotations')
     implementation deps.javaPoet
 
     implementation deps.kotlin

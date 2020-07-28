@@ -1,5 +1,5 @@
 rootProject.name = 'pommel'
 
-include ':pommel-annotations'
-include ':pommel-compiler'
-include ':pommel-test'
+include ':annotations'
+include ':compiler'
+include ':tests'
