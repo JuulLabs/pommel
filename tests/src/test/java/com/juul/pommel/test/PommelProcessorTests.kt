@@ -6,8 +6,8 @@ import com.tschuchort.compiletesting.SourceFile
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Assert.assertEquals
 import org.junit.Rule
-import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import kotlin.test.Test
 
 class PommelProcessorTests {
 

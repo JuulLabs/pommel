@@ -38,11 +38,13 @@ dependencies {
 
     implementation deps.kotlin
 
-    testImplementation deps.junit
     testImplementation deps.assertJ
-    testImplementation deps.kotlin
-    testImplementation deps.kotlinCompileTesting
     testImplementation deps.dagger
     testImplementation deps.daggerHilt
     testImplementation deps.inject
+    testImplementation deps.junit
+    testImplementation deps.kotlin
+    testImplementation deps.kotlinCompileTesting
+    testImplementation deps.kotlinTestCommon
+    testImplementation deps.kotlinTestJunit
 }
