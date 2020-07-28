@@ -1,6 +1,6 @@
 # Gradle
 .gradle
-build
+build/
 reports
 
 # IntelliJ
