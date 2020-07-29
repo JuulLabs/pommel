@@ -1,6 +1,6 @@
 # Pommel
 
-Pommel is an annotation processor for Dagger projects to generate a module with single binding
+Pommel is an annotation processor for Dagger projects to generate a module with a single binding
 
 # Motivation
 
