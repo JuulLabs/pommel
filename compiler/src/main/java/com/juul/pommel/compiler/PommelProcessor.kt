@@ -91,12 +91,12 @@ class PommelProcessor : AbstractProcessor() {
         var valid = true
 
         if (Modifier.PRIVATE in modifiers) {
-            error("@SoloModule-using types must not be private", this)
+            error("Types marked with @SoloModule must not be private", this)
             valid = false
         }
 
         if (enclosingElement.kind == ElementKind.CLASS && Modifier.STATIC !in modifiers) {
-            error("Nested @SoloModule--using types must be static", this)
+            error("Nested types marked with @SoloModule must be static", this)
             valid = false
         }
 
@@ -131,7 +131,7 @@ class PommelProcessor : AbstractProcessor() {
             .castEach<ExecutableElement>()
 
         if (constructors.size > 1) {
-            error("Multiple @Inject-annotated constructors found.", this)
+            error("Multiple constructors marked with @Inject annotated found.", this)
             valid = false
         }
 
