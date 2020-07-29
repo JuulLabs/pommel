@@ -2,26 +2,26 @@ package com.juul.pommel.compiler
 
 import com.google.auto.service.AutoService
 import com.juul.pommel.annotations.SoloModule
+import com.juul.pommel.compiler.internal.ACTIVITY_RETAINED_SCOPED
+import com.juul.pommel.compiler.internal.ACTIVITY_SCOPED
+import com.juul.pommel.compiler.internal.FRAGMENT_SCOPED
+import com.juul.pommel.compiler.internal.INJECT_ANNOTATION
+import com.juul.pommel.compiler.internal.JAVA_OBJECT
+import com.juul.pommel.compiler.internal.SCOPE_ANNOTATION
+import com.juul.pommel.compiler.internal.SERVICE_SCOPED
+import com.juul.pommel.compiler.internal.SINGLETON_SCOPED
+import com.juul.pommel.compiler.internal.VIEW_SCOPED
 import com.juul.pommel.compiler.internal.activityComponent
 import com.juul.pommel.compiler.internal.activityRetainedComponent
-import com.juul.pommel.compiler.internal.activityRetainedScoped
-import com.juul.pommel.compiler.internal.activityScoped
 import com.juul.pommel.compiler.internal.applicationComponent
 import com.juul.pommel.compiler.internal.castEach
 import com.juul.pommel.compiler.internal.findElementsAnnotatedWith
 import com.juul.pommel.compiler.internal.fragmentComponent
-import com.juul.pommel.compiler.internal.fragmentScoped
 import com.juul.pommel.compiler.internal.getTypeMirror
 import com.juul.pommel.compiler.internal.hasAnnotation
-import com.juul.pommel.compiler.internal.injectAnnotation
-import com.juul.pommel.compiler.internal.javaObject
-import com.juul.pommel.compiler.internal.scopeAnnotaion
 import com.juul.pommel.compiler.internal.serviceComponent
-import com.juul.pommel.compiler.internal.serviceScoped
-import com.juul.pommel.compiler.internal.singletionScoped
 import com.juul.pommel.compiler.internal.toTypeName
 import com.juul.pommel.compiler.internal.viewComponent
-import com.juul.pommel.compiler.internal.viewScoped
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.JavaFile
 import net.ltgt.gradle.incap.IncrementalAnnotationProcessor
@@ -101,19 +101,19 @@ class PommelProcessor : AbstractProcessor() {
         }
 
         val scope = annotationMirrors.find {
-            it.annotationType.asElement().hasAnnotation(scopeAnnotaion)
+            it.annotationType.asElement().hasAnnotation(SCOPE_ANNOTATION)
         }?.let {
             AnnotationSpec.get(it)
         }
 
         val component = if (scope != null) {
             when (scope.type.toString()) {
-                singletionScoped -> applicationComponent
-                activityRetainedScoped -> activityRetainedComponent
-                activityScoped -> activityComponent
-                fragmentScoped -> fragmentComponent
-                serviceScoped -> serviceComponent
-                viewScoped -> viewComponent
+                SINGLETON_SCOPED -> applicationComponent
+                ACTIVITY_RETAINED_SCOPED -> activityRetainedComponent
+                ACTIVITY_SCOPED -> activityComponent
+                FRAGMENT_SCOPED -> fragmentComponent
+                SERVICE_SCOPED -> serviceComponent
+                VIEW_SCOPED -> viewComponent
                 else -> null
             }
         } else {
@@ -127,7 +127,7 @@ class PommelProcessor : AbstractProcessor() {
 
         val constructors = enclosedElements
             .filter { it.kind == ElementKind.CONSTRUCTOR }
-            .filter { it.hasAnnotation(injectAnnotation) }
+            .filter { it.hasAnnotation(INJECT_ANNOTATION) }
             .castEach<ExecutableElement>()
 
         if (constructors.size > 1) {
@@ -150,7 +150,7 @@ class PommelProcessor : AbstractProcessor() {
         val bindSuperType = soloModule.bindSuperType
         val typeName = checkNotNull(getTypeMirror { soloModule.bindingClass }).toTypeName()
         val binds = when {
-            typeName.toString() == javaObject -> null
+            typeName.toString() == JAVA_OBJECT -> null
             else -> typeName
         }
 
@@ -172,7 +172,7 @@ class PommelProcessor : AbstractProcessor() {
 
         val bindingType = when {
             interfaceType != null && bindSuperType -> interfaceType.toTypeName()
-            superclass.toString() != javaObject && bindSuperType -> superclass.toTypeName()
+            superclass.toString() != JAVA_OBJECT && bindSuperType -> superclass.toTypeName()
             binds != null -> binds
             else -> this.asType().toTypeName()
         }

@@ -9,16 +9,16 @@ import javax.lang.model.element.TypeElement
 import javax.lang.model.type.MirroredTypeException
 import javax.lang.model.type.TypeMirror
 
-internal val scopeAnnotaion: String = "javax.inject.Scope"
-internal val injectAnnotation: String = "javax.inject.Inject"
-internal val javaObject: String = "java.lang.Object"
+internal const val SCOPE_ANNOTATION: String = "javax.inject.Scope"
+internal const val INJECT_ANNOTATION: String = "javax.inject.Inject"
+internal const val JAVA_OBJECT: String = "java.lang.Object"
 
-internal val singletionScoped: String = "javax.inject.Singleton"
-internal val activityRetainedScoped: String = "dagger.hilt.android.scopes.ActivityRetainedScoped"
-internal val activityScoped: String = "dagger.hilt.android.scopes.ActivityScoped"
-internal val fragmentScoped: String = "dagger.hilt.android.scopes.FragmentScoped"
-internal val serviceScoped: String = "dagger.hilt.android.scopes.ServiceScoped"
-internal val viewScoped: String = "dagger.hilt.android.scopes.ViewScoped"
+internal const val SINGLETON_SCOPED: String = "javax.inject.Singleton"
+internal const val ACTIVITY_RETAINED_SCOPED: String = "dagger.hilt.android.scopes.ActivityRetainedScoped"
+internal const val ACTIVITY_SCOPED: String = "dagger.hilt.android.scopes.ActivityScoped"
+internal const val FRAGMENT_SCOPED: String = "dagger.hilt.android.scopes.FragmentScoped"
+internal const val SERVICE_SCOPED: String = "dagger.hilt.android.scopes.ServiceScoped"
+internal const val VIEW_SCOPED: String = "dagger.hilt.android.scopes.ViewScoped"
 
 internal val applicationComponent: ClassName = ClassName.get("dagger.hilt.android.components", "ApplicationComponent")
 internal val activityComponent: ClassName = ClassName.get("dagger.hilt.android.components", "ActivityComponent")
