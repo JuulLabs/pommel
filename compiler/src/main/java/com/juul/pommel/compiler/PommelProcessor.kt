@@ -159,8 +159,6 @@ class PommelProcessor : AbstractProcessor() {
             valid = false
         }
 
-        if (!valid) return null
-
         if (interfaces.size >= 1 && superclass.toString() != JAVA_OBJECT && bindSuperType) {
             error("Multiple super classes found. Binding type must be specified", this)
             valid = false
