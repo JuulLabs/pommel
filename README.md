@@ -12,7 +12,7 @@ and provide your own testing modules.
 ```kotlin
 @UninstallModules(ProductionServiceModule::class)
 @HiltAndroidTest
-class FooTest {
+class ServiceTest {
 
   @Rule
   @JvmField
