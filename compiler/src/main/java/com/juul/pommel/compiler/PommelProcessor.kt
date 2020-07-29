@@ -147,21 +147,21 @@ class PommelProcessor : AbstractProcessor() {
 
         val soloModule = checkNotNull(getAnnotation(SoloModule::class.java))
         val install = soloModule.install
-        val bindSuperType = soloModule.bindSuperType
         val typeName = checkNotNull(getTypeMirror { soloModule.bindingClass }).toTypeName()
         val binds = when {
             typeName.toString() == JAVA_OBJECT -> null
             else -> typeName
         }
+        val bindSuperType = soloModule.bindSuperType && binds == null
 
-        if (interfaces.size > 1 && binds == null && bindSuperType) {
+        if (interfaces.size > 1 && bindSuperType) {
             error("Multiple interfaces found. Binding type must be specified", this)
             valid = false
         }
 
         if (!valid) return null
 
-        if (interfaces.size >= 1 && superclass.toString() != "java.lang.Object" && bindSuperType) {
+        if (interfaces.size >= 1 && superclass.toString() != JAVA_OBJECT && bindSuperType) {
             error("Multiple super classes found. Binding type must be specified", this)
             valid = false
         }
