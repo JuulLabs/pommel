@@ -200,7 +200,7 @@ Reference the [Dagger-Hilt testing package](https://dagger.dev/hilt/testing) for
 
 # Limitations
 
-Pommel currently only supports being annotated on a class as a result it assumes that the `class` has at least one constructor that is annotated with `@Inject` and
+Pommel currently only supports being annotated on a `class`, as a result it assumes that the `class` has at least one constructor that is annotated with `@Inject` and
 that all parameters passed into the constructor are also on the Dagger graph.
 
 # Download
