@@ -6,7 +6,7 @@ Pommel is an annotation processor for Dagger projects to generate a module with 
 
 The new [Dagger-Hilt](https://dagger.dev/hilt/) package from Google has simplified the Dagger setup for
 Android and introduced a [new testing package](https://dagger.dev/hilt/testing). You can now choose modules
-to exclude in your tests using [@UninstallModules](https://dagger.dev/api/latest/dagger/hilt/android/testing/UninstallModules.html)  
+to exclude in your tests using [@UninstallModules](https://dagger.dev/api/latest/dagger/hilt/android/testing/UninstallModules.html)
 and provide your own testing modules.
 
 ```kotlin
