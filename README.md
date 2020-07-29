@@ -179,7 +179,7 @@ class MyService @Inject constructor(
 )
 ```
 
-Then in your test class:
+Then in your test `class`:
 
 ```kotlin
 @UninstallModules(MyService_SoloModule::class)
