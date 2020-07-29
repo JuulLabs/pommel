@@ -2,11 +2,26 @@ package com.juul.pommel.compiler
 
 import com.google.auto.service.AutoService
 import com.juul.pommel.annotations.SoloModule
+import com.juul.pommel.compiler.internal.activityComponent
+import com.juul.pommel.compiler.internal.activityRetainedComponent
+import com.juul.pommel.compiler.internal.activityRetainedScoped
+import com.juul.pommel.compiler.internal.activityScoped
+import com.juul.pommel.compiler.internal.applicationComponent
 import com.juul.pommel.compiler.internal.castEach
 import com.juul.pommel.compiler.internal.findElementsAnnotatedWith
+import com.juul.pommel.compiler.internal.fragmentComponent
+import com.juul.pommel.compiler.internal.fragmentScoped
 import com.juul.pommel.compiler.internal.getTypeMirror
 import com.juul.pommel.compiler.internal.hasAnnotation
+import com.juul.pommel.compiler.internal.injectAnnotation
+import com.juul.pommel.compiler.internal.javaObject
+import com.juul.pommel.compiler.internal.scopeAnnotaion
+import com.juul.pommel.compiler.internal.serviceComponent
+import com.juul.pommel.compiler.internal.serviceScoped
+import com.juul.pommel.compiler.internal.singletionScoped
 import com.juul.pommel.compiler.internal.toTypeName
+import com.juul.pommel.compiler.internal.viewComponent
+import com.juul.pommel.compiler.internal.viewScoped
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.JavaFile
 import net.ltgt.gradle.incap.IncrementalAnnotationProcessor
@@ -86,14 +101,33 @@ class PommelProcessor : AbstractProcessor() {
         }
 
         val scope = annotationMirrors.find {
-            it.annotationType.asElement().hasAnnotation("javax.inject.Scope")
+            it.annotationType.asElement().hasAnnotation(scopeAnnotaion)
         }?.let {
             AnnotationSpec.get(it)
         }
 
+        val component = if (scope != null) {
+            when (scope.type.toString()) {
+                singletionScoped -> applicationComponent
+                activityRetainedScoped -> activityRetainedComponent
+                activityScoped -> activityComponent
+                fragmentScoped -> fragmentComponent
+                serviceScoped -> serviceComponent
+                viewScoped -> viewComponent
+                else -> null
+            }
+        } else {
+            applicationComponent
+        }
+
+        if (component == null) {
+            error("@SoloModule does not support custom scopes--use Dagger-Hilt defined scopes or set install to false", this)
+            valid = false
+        }
+
         val constructors = enclosedElements
             .filter { it.kind == ElementKind.CONSTRUCTOR }
-            .filter { it.hasAnnotation("javax.inject.Inject") }
+            .filter { it.hasAnnotation(injectAnnotation) }
             .castEach<ExecutableElement>()
 
         if (constructors.size > 1) {
@@ -116,7 +150,7 @@ class PommelProcessor : AbstractProcessor() {
         val bindSuperType = soloModule.bindSuperType
         val typeName = checkNotNull(getTypeMirror { soloModule.bindingClass }).toTypeName()
         val binds = when {
-            typeName.toString() == "java.lang.Object" -> null
+            typeName.toString() == javaObject -> null
             else -> typeName
         }
 
@@ -138,7 +172,7 @@ class PommelProcessor : AbstractProcessor() {
 
         val bindingType = when {
             interfaceType != null && bindSuperType -> interfaceType.toTypeName()
-            superclass.toString() != "java.lang.Object" && bindSuperType -> superclass.toTypeName()
+            superclass.toString() != javaObject && bindSuperType -> superclass.toTypeName()
             binds != null -> binds
             else -> this.asType().toTypeName()
         }
@@ -147,6 +181,7 @@ class PommelProcessor : AbstractProcessor() {
             moduleType = this,
             targetType = this.asType().toTypeName(),
             scope = scope,
+            component = checkNotNull(component),
             parameters = constructor.parameters,
             install = install,
             binds = bindingType

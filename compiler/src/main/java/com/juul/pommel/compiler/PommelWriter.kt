@@ -17,12 +17,12 @@ import javax.lang.model.element.VariableElement
 private val MODULE = ClassName.get("dagger", "Module")
 private val PROVIDES = ClassName.get("dagger", "Provides")
 private val INSTALLIN = ClassName.get("dagger.hilt", "InstallIn")
-private val APPCOMPONENT = ClassName.get("dagger.hilt.android.components", "ApplicationComponent")
 
 class PommelWriter(
     val moduleType: TypeElement,
     val targetType: TypeName,
     val scope: AnnotationSpec?,
+    val component: ClassName,
     val parameters: List<VariableElement>,
     val install: Boolean,
     val binds: TypeName
@@ -38,7 +38,7 @@ class PommelWriter(
                 if (install) {
                     addAnnotation(
                         AnnotationSpec.builder(INSTALLIN)
-                            .addMember("value", "\$T.\$L", APPCOMPONENT, "class")
+                            .addMember("value", "\$T.\$L", component, "class")
                             .build()
                     )
                 }
@@ -70,7 +70,7 @@ private fun ClassName.soloModuleName(): ClassName {
     return peerClassWithReflectionNesting(simpleName() + "_SoloModule")
 }
 
-fun ClassName.peerClassWithReflectionNesting(name: String): ClassName {
+private fun ClassName.peerClassWithReflectionNesting(name: String): ClassName {
     var prefix = ""
     var peek = this
     while (true) {

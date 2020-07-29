@@ -94,7 +94,7 @@ class PommelProcessorTests {
     }
 
     @Test
-    fun `Singleton scope `() {
+    fun `install in Singleton scope `() {
         val result = compile(
             SourceFile.kotlin(
                 "source.kt",
@@ -136,6 +136,260 @@ class PommelProcessorTests {
            }
          }"""
         )
+    }
+
+    @Test
+    fun `install in ActivityRetainedScoped`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+          
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject
+          import dagger.hilt.android.scopes.ActivityRetainedScoped
+          
+          @SoloModule
+          @ActivityRetainedScoped
+          class SampleClass @Inject constructor()
+
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("SampleClass_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+
+         import dagger.Module;
+         import dagger.Provides;
+         import dagger.hilt.InstallIn;
+         import dagger.hilt.android.components.ActivityRetainedComponent;
+         import dagger.hilt.android.scopes.ActivityRetainedScoped;
+         
+         @Module
+         @InstallIn(ActivityRetainedComponent.class)
+         public class SampleClass_SoloModule {
+           @Provides
+           @ActivityRetainedScoped
+           public SampleClass provides_test_SampleClass() {
+             return new SampleClass(
+                 );
+           }
+         }"""
+        )
+    }
+
+    @Test
+    fun `install in ActivityScoped`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+          
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject
+          import dagger.hilt.android.scopes.ActivityScoped
+          
+          @SoloModule
+          @ActivityScoped
+          class SampleClass @Inject constructor()
+
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("SampleClass_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+
+         import dagger.Module;
+         import dagger.Provides;
+         import dagger.hilt.InstallIn;
+         import dagger.hilt.android.components.ActivityComponent;
+         import dagger.hilt.android.scopes.ActivityScoped;
+         
+         @Module
+         @InstallIn(ActivityComponent.class)
+         public class SampleClass_SoloModule {
+           @Provides
+           @ActivityScoped
+           public SampleClass provides_test_SampleClass() {
+             return new SampleClass(
+                 );
+           }
+         }"""
+        )
+    }
+
+    @Test
+    fun `install in FragmentScoped`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+          
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject
+          import dagger.hilt.android.scopes.FragmentScoped
+          
+          @SoloModule
+          @FragmentScoped
+          class SampleClass @Inject constructor()
+
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("SampleClass_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+
+         import dagger.Module;
+         import dagger.Provides;
+         import dagger.hilt.InstallIn;
+         import dagger.hilt.android.components.FragmentComponent;
+         import dagger.hilt.android.scopes.FragmentScoped;
+         
+         @Module
+         @InstallIn(FragmentComponent.class)
+         public class SampleClass_SoloModule {
+           @Provides
+           @FragmentScoped
+           public SampleClass provides_test_SampleClass() {
+             return new SampleClass(
+                 );
+           }
+         }"""
+        )
+    }
+
+    @Test
+    fun `install in ServiceScoped`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+          
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject
+          import dagger.hilt.android.scopes.ServiceScoped
+          
+          @SoloModule
+          @ServiceScoped
+          class SampleClass @Inject constructor()
+
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("SampleClass_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+
+         import dagger.Module;
+         import dagger.Provides;
+         import dagger.hilt.InstallIn;
+         import dagger.hilt.android.components.ServiceComponent;
+         import dagger.hilt.android.scopes.ServiceScoped;
+         
+         @Module
+         @InstallIn(ServiceComponent.class)
+         public class SampleClass_SoloModule {
+           @Provides
+           @ServiceScoped
+           public SampleClass provides_test_SampleClass() {
+             return new SampleClass(
+                 );
+           }
+         }"""
+        )
+    }
+
+    @Test
+    fun `install in ViewScoped`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+          
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject
+          import dagger.hilt.android.scopes.ViewScoped
+          
+          @SoloModule
+          @ViewScoped
+          class SampleClass @Inject constructor()
+
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("SampleClass_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+
+         import dagger.Module;
+         import dagger.Provides;
+         import dagger.hilt.InstallIn;
+         import dagger.hilt.android.components.ViewComponent;
+         import dagger.hilt.android.scopes.ViewScoped;
+         
+         @Module
+         @InstallIn(ViewComponent.class)
+         public class SampleClass_SoloModule {
+           @Provides
+           @ViewScoped
+           public SampleClass provides_test_SampleClass() {
+             return new SampleClass(
+                 );
+           }
+         }"""
+        )
+    }
+
+    @Test
+    fun `custome scope fails`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+          
+        
+          
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject
+          import javax.inject.Scope
+          
+          @Scope
+          annotation class CustomScope
+          
+          @SoloModule
+          @CustomScope
+          class SampleClass @Inject constructor()
+
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.COMPILATION_ERROR)
+        assertThat(result.messages).contains("error: @SoloModule does not support custom scopes--use Dagger-Hilt defined scopes or set install to false")
     }
 
     @Test

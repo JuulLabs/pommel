@@ -1,5 +1,6 @@
 package com.juul.pommel.compiler.internal
 
+import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.TypeName
 import javax.annotation.processing.RoundEnvironment
 import javax.lang.model.AnnotatedConstruct
@@ -7,6 +8,24 @@ import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
 import javax.lang.model.type.MirroredTypeException
 import javax.lang.model.type.TypeMirror
+
+internal val scopeAnnotaion: String = "javax.inject.Scope"
+internal val injectAnnotation: String = "javax.inject.Inject"
+internal val javaObject: String = "java.lang.Object"
+
+internal val singletionScoped: String = "javax.inject.Singleton"
+internal val activityRetainedScoped: String = "dagger.hilt.android.scopes.ActivityRetainedScoped"
+internal val activityScoped: String = "dagger.hilt.android.scopes.ActivityScoped"
+internal val fragmentScoped: String = "dagger.hilt.android.scopes.FragmentScoped"
+internal val serviceScoped: String = "dagger.hilt.android.scopes.ServiceScoped"
+internal val viewScoped: String = "dagger.hilt.android.scopes.ViewScoped"
+
+internal val applicationComponent: ClassName = ClassName.get("dagger.hilt.android.components", "ApplicationComponent")
+internal val activityComponent: ClassName = ClassName.get("dagger.hilt.android.components", "ActivityComponent")
+internal val activityRetainedComponent: ClassName = ClassName.get("dagger.hilt.android.components", "ActivityRetainedComponent")
+internal val fragmentComponent: ClassName = ClassName.get("dagger.hilt.android.components", "FragmentComponent")
+internal val serviceComponent: ClassName = ClassName.get("dagger.hilt.android.components", "ServiceComponent")
+internal val viewComponent: ClassName = ClassName.get("dagger.hilt.android.components", "ViewComponent")
 
 /** Return a list of elements annotated with `T`. */
 internal inline fun <reified T : Annotation> RoundEnvironment.findElementsAnnotatedWith(): Set<Element> =
