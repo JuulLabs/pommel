@@ -364,7 +364,7 @@ class PommelProcessorTests {
     }
 
     @Test
-    fun `custome scope fails`() {
+    fun `custom scope fails`() {
         val result = compile(
             SourceFile.kotlin(
                 "source.kt",
@@ -917,6 +917,97 @@ class PommelProcessorTests {
                  b,
                  c,
                  d);
+           }
+         }"""
+        )
+    }
+
+    @Test
+    fun `private class fails with compilation error`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+          
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject 
+          
+          @SoloModule
+          private class SampleClass @Inject constructor()
+
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.COMPILATION_ERROR)
+        assertThat(result.messages).contains("error: Types marked with @SoloModule must be public")
+    }
+
+    @Test
+    fun `nested non-static class fails with compilation error`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+          
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject 
+          
+          class SampleClass {
+              
+              @SoloModule
+              inner class InnerClass @Inject constructor()
+          }
+
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.COMPILATION_ERROR)
+        assertThat(result.messages).contains("error: Nested types marked with @SoloModule must be static")
+    }
+
+    @Test
+    fun `nested static class`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+          
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject 
+          
+          class SampleClass {
+              
+              @SoloModule
+              class InnerClass @Inject constructor()
+          }
+
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("SampleClass\$InnerClass_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+
+         import dagger.Module;
+         import dagger.Provides;
+         import dagger.hilt.InstallIn;
+         import dagger.hilt.android.components.ApplicationComponent;
+         
+         @Module
+         @InstallIn(ApplicationComponent.class)
+         public class SampleClass${'$'}InnerClass_SoloModule {
+           @Provides
+           public SampleClass.InnerClass provides_test_SampleClass${'$'}InnerClass() {
+             return new SampleClass.InnerClass(
+                 );
            }
          }"""
         )

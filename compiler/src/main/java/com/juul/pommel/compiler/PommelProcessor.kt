@@ -90,8 +90,8 @@ class PommelProcessor : AbstractProcessor() {
     private fun TypeElement.toPommelWriter(): PommelWriter? {
         var valid = true
 
-        if (Modifier.PRIVATE in modifiers) {
-            error("Types marked with @SoloModule must not be private", this)
+        if (Modifier.PUBLIC !in modifiers) {
+            error("Types marked with @SoloModule must be public", this)
             valid = false
         }
 
