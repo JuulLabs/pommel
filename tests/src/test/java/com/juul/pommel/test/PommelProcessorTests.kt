@@ -516,7 +516,7 @@ class PommelProcessorTests {
           
           abstract class AbstractClass
           
-          @SoloModule
+          @SoloModule(AbstractClass::class)
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a" ) val a: Int,
@@ -575,7 +575,7 @@ class PommelProcessorTests {
           
           interface TestInterface
           
-          @SoloModule
+          @SoloModule(TestInterface::class)
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a" ) val a: Int,
@@ -636,7 +636,7 @@ class PommelProcessorTests {
           
           interface SecondTestInterface
           
-          @SoloModule(bindingClass = SecondTestInterface::class)
+          @SoloModule(SecondTestInterface::class)
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a" ) val a: Int,
@@ -695,7 +695,7 @@ class PommelProcessorTests {
           
           interface TestInterface
           
-          @SoloModule(bindSuperType = false)
+          @SoloModule
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a" ) val a: Int,
@@ -740,74 +740,6 @@ class PommelProcessorTests {
     }
 
     @Test
-    fun `compilation error from extending abstract class and interface `() {
-        val result = compile(
-            SourceFile.kotlin(
-                "source.kt",
-                """
-          package test 
-          
-          import com.juul.pommel.annotations.SoloModule
-          import javax.inject.Inject
-          import javax.inject.Named
-          import javax.inject.Singleton 
-          
-          interface TestInterface
-          
-          abstract class AbstractClass
-          
-          @SoloModule
-          @Singleton
-          class SampleClass @Inject constructor(
-              @Named("a" ) val a: Int,
-              val b: String,
-              val c: Double,
-              @Named("b") val d: Byte
-          ) : AbstractClass(), TestInterface
-
-          """
-            )
-        )
-
-        assertEquals(result.exitCode, KotlinCompilation.ExitCode.COMPILATION_ERROR)
-        assertThat(result.messages).contains("error: Multiple super classes found. Binding type must be specified")
-    }
-
-    @Test
-    fun `compilation error from extending multiple interfaces`() {
-        val result = compile(
-            SourceFile.kotlin(
-                "source.kt",
-                """
-          package test 
-          
-          import com.juul.pommel.annotations.SoloModule
-          import javax.inject.Inject
-          import javax.inject.Named
-          import javax.inject.Singleton 
-          
-          interface TestInterface
-          
-          interface SecondInterface
-          
-          @SoloModule
-          @Singleton
-          class SampleClass @Inject constructor(
-              @Named("a" ) val a: Int,
-              val b: String,
-              val c: Double,
-              @Named("b") val d: Byte
-          ) : SecondInterface, TestInterface
-
-          """
-            )
-        )
-
-        assertEquals(result.exitCode, KotlinCompilation.ExitCode.COMPILATION_ERROR)
-        assertThat(result.messages).contains("error: Multiple interfaces found. Binding type must be specified")
-    }
-
-    @Test
     fun `bind concrete implementation extending multiple interfaces`() {
         val result = compile(
             SourceFile.kotlin(
@@ -824,7 +756,7 @@ class PommelProcessorTests {
           
           interface OtherInterface
           
-          @SoloModule(bindSuperType = false)
+          @SoloModule
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a" ) val a: Int,
@@ -885,7 +817,7 @@ class PommelProcessorTests {
           
           abstract class AbstractClass
           
-          @SoloModule(bindSuperType = false)
+          @SoloModule
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a" ) val a: Int,
@@ -930,7 +862,7 @@ class PommelProcessorTests {
     }
 
     @Test
-    fun `use binding class when extending interfaces and abstract class`() {
+    fun `use abstract class when extending interfaces and abstract class`() {
         val result = compile(
             SourceFile.kotlin(
                 "source.kt",
@@ -946,7 +878,7 @@ class PommelProcessorTests {
           
           abstract class AbstractClass
           
-          @SoloModule(bindingClass = AbstractClass::class)
+          @SoloModule(AbstractClass::class)
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a" ) val a: Int,

@@ -6,7 +6,7 @@ import com.juul.pommel.compiler.internal.ACTIVITY_RETAINED_SCOPED
 import com.juul.pommel.compiler.internal.ACTIVITY_SCOPED
 import com.juul.pommel.compiler.internal.FRAGMENT_SCOPED
 import com.juul.pommel.compiler.internal.INJECT_ANNOTATION
-import com.juul.pommel.compiler.internal.JAVA_OBJECT
+import com.juul.pommel.compiler.internal.JAVA_VOID
 import com.juul.pommel.compiler.internal.SCOPE_ANNOTATION
 import com.juul.pommel.compiler.internal.SERVICE_SCOPED
 import com.juul.pommel.compiler.internal.SINGLETON_SCOPED
@@ -135,45 +135,21 @@ class PommelProcessor : AbstractProcessor() {
             valid = false
         }
 
-        if (!valid) return null
-
         val constructor = constructors.single()
         if (Modifier.PRIVATE in constructor.modifiers) {
             error("@Inject constructor must not be private.", constructor)
             valid = false
         }
 
-        if (!valid) return null
-
         val soloModule = checkNotNull(getAnnotation(SoloModule::class.java))
         val install = soloModule.install
         val typeName = checkNotNull(getTypeMirror { soloModule.bindingClass }).toTypeName()
-        val binds = when {
-            typeName.toString() == JAVA_OBJECT -> null
+        val bindingType = when {
+            typeName.toString() == JAVA_VOID -> this.asType().toTypeName()
             else -> typeName
-        }
-        val bindSuperType = soloModule.bindSuperType && binds == null
-
-        if (interfaces.size > 1 && bindSuperType) {
-            error("Multiple interfaces found. Binding type must be specified", this)
-            valid = false
-        }
-
-        if (interfaces.size >= 1 && superclass.toString() != JAVA_OBJECT && bindSuperType) {
-            error("Multiple super classes found. Binding type must be specified", this)
-            valid = false
         }
 
         if (!valid) return null
-
-        val interfaceType = interfaces.singleOrNull()
-
-        val bindingType = when {
-            interfaceType != null && bindSuperType -> interfaceType.toTypeName()
-            superclass.toString() != JAVA_OBJECT && bindSuperType -> superclass.toTypeName()
-            binds != null -> binds
-            else -> this.asType().toTypeName()
-        }
 
         return PommelWriter(
             moduleType = this,

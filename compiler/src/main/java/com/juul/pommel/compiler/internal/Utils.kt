@@ -11,7 +11,7 @@ import javax.lang.model.type.TypeMirror
 
 internal const val SCOPE_ANNOTATION: String = "javax.inject.Scope"
 internal const val INJECT_ANNOTATION: String = "javax.inject.Inject"
-internal const val JAVA_OBJECT: String = "java.lang.Object"
+internal const val JAVA_VOID: String = "java.lang.Void"
 
 internal const val SINGLETON_SCOPED: String = "javax.inject.Singleton"
 internal const val ACTIVITY_RETAINED_SCOPED: String = "dagger.hilt.android.scopes.ActivityRetainedScoped"

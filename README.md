@@ -84,7 +84,7 @@ public class SampleClass_SoloModule {
 }
 ```
 
-If your class extends an `abstract class` or `interface`, Pommel will automatically bind to the extending type:
+Pommel will always bind to concrete implementation:
 
 ```kotlin
 interface MyInterface
@@ -104,53 +104,23 @@ Will generate the equivalent of:
 public class SampleClass_SoloModule {
   @Provides
   @Singleton
-  public MyInterface provides_SampleClass(@Named("a") int a, String b) {
+  public SampleClass provides_SampleClass(@Named("a") int a, String b) {
     return new SampleClass(a, b);
   }
 }
 ```
 
-If you extend multiple `interface`s and an `abstract class` you need to specify the binding type with `bindingClass` parameter:
+If your class extends an `abstract class` or `interface`, you can specify to bind to the extending type:
 
 ```kotlin
 interface MyInterface
 
-interface OtherInterface
-
-@SoloModule(bindingClass = OtherInterface::class)
-@Singleton
-class SampleClass @Inject constructor(
-    @Named("a" ) val a: Int,
-    val b: String
-) : MyInterface, OtherInterface
-```
-
-Will generate the equivalent of:
-
-```java
-@Module
-public class SampleClass_SoloModule {
-  @Provides
-  @Singleton
-  public OtherInterface provides_SampleClass(@Named("a") int a, String b) {
-    return new SampleClass(a, b);
-  }
-}
-```
-
-If you wish just to bind to a concrete implementation you can set the `bindSuperType` parameter to `false`:
-
-```kotlin
-interface MyInterface
-
-interface OtherInterface
-
-@SoloModule(bindSuperType = false)
+@SoloModule(MyInterface::class)
 @Singleton
 class SampleClass @Inject constructor(
     @Named("a") val a: Int,
     val b: String
-) : MyInterface, OtherInterface
+) : MyInterface
 ```
 
 Will generate the equivalent of:
@@ -160,7 +130,7 @@ Will generate the equivalent of:
 public class SampleClass_SoloModule {
   @Provides
   @Singleton
-  public SampleClass provides_SampleClass(@Named("a") int a, String b) {
+  public MyInterface provides_SampleClass(@Named("a") int a, String b) {
     return new SampleClass(a, b);
   }
 }
