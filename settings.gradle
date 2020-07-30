@@ -1,0 +1,5 @@
+rootProject.name = 'pommel'
+
+include ':annotations'
+include ':compiler'
+include ':tests'
