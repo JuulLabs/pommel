@@ -84,7 +84,7 @@ public class SampleClass_SoloModule {
 }
 ```
 
-Pommel will always bind to concrete implementation:
+Pommel will always bind to the concrete implementation:
 
 ```kotlin
 interface MyInterface
