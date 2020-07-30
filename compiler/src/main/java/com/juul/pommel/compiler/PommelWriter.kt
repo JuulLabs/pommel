@@ -22,7 +22,7 @@ class PommelWriter(
     val moduleType: TypeElement,
     val targetType: TypeName,
     val scope: AnnotationSpec?,
-    val component: ClassName,
+    val component: ClassName?,
     val parameters: List<VariableElement>,
     val install: Boolean,
     val binds: TypeName
@@ -35,7 +35,7 @@ class PommelWriter(
             .addModifiers(Modifier.PUBLIC)
             .addAnnotation(MODULE)
             .apply {
-                if (install) {
+                if (install && component != null) {
                     addAnnotation(
                         AnnotationSpec.builder(INSTALLIN)
                             .addMember("value", "\$T.\$L", component, "class")

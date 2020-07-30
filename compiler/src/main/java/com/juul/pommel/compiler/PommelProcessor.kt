@@ -100,31 +100,6 @@ class PommelProcessor : AbstractProcessor() {
             valid = false
         }
 
-        val scope = annotationMirrors.find {
-            it.annotationType.asElement().hasAnnotation(SCOPE_ANNOTATION)
-        }?.let {
-            AnnotationSpec.get(it)
-        }
-
-        val component = if (scope != null) {
-            when (scope.type.toString()) {
-                SINGLETON_SCOPED -> applicationComponent
-                ACTIVITY_RETAINED_SCOPED -> activityRetainedComponent
-                ACTIVITY_SCOPED -> activityComponent
-                FRAGMENT_SCOPED -> fragmentComponent
-                SERVICE_SCOPED -> serviceComponent
-                VIEW_SCOPED -> viewComponent
-                else -> null
-            }
-        } else {
-            applicationComponent
-        }
-
-        if (component == null) {
-            error("@SoloModule does not support custom scopes--use Dagger-Hilt defined scopes or set install to false", this)
-            valid = false
-        }
-
         val constructors = enclosedElements
             .filter { it.kind == ElementKind.CONSTRUCTOR }
             .filter { it.hasAnnotation(INJECT_ANNOTATION) }
@@ -149,13 +124,38 @@ class PommelProcessor : AbstractProcessor() {
             else -> typeName
         }
 
+        val scope = annotationMirrors.find {
+            it.annotationType.asElement().hasAnnotation(SCOPE_ANNOTATION)
+        }?.let {
+            AnnotationSpec.get(it)
+        }
+
+        val component = if (scope != null) {
+            when (scope.type.toString()) {
+                SINGLETON_SCOPED -> applicationComponent
+                ACTIVITY_RETAINED_SCOPED -> activityRetainedComponent
+                ACTIVITY_SCOPED -> activityComponent
+                FRAGMENT_SCOPED -> fragmentComponent
+                SERVICE_SCOPED -> serviceComponent
+                VIEW_SCOPED -> viewComponent
+                else -> null // custom scope
+            }
+        } else {
+            applicationComponent
+        }
+
+        if (component == null && install) {
+            error("@SoloModule does not support custom scopes--use Dagger-Hilt defined scopes or set install to false", this)
+            valid = false
+        }
+
         if (!valid) return null
 
         return PommelWriter(
             moduleType = this,
             targetType = this.asType().toTypeName(),
             scope = scope,
-            component = checkNotNull(component),
+            component = component,
             parameters = constructor.parameters,
             install = install,
             binds = bindingType

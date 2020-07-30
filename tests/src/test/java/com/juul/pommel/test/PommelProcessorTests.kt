@@ -393,6 +393,52 @@ class PommelProcessorTests {
     }
 
     @Test
+    fun `custom scope with install false`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+          
+        
+          
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject
+          import javax.inject.Scope
+          
+          @Scope
+          annotation class CustomScope
+          
+          @SoloModule(install = false)
+          @CustomScope
+          class SampleClass @Inject constructor()
+
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("SampleClass_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+
+         import dagger.Module;
+         import dagger.Provides;
+         
+         @Module
+         public class SampleClass_SoloModule {
+           @Provides
+           @CustomScope
+           public SampleClass provides_test_SampleClass() {
+             return new SampleClass(
+                 );
+           }
+         }"""
+        )
+    }
+
+    @Test
     fun `with parameters`() {
         val result = compile(
             SourceFile.kotlin(
