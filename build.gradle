@@ -45,3 +45,5 @@ subprojects {
         jcenter()
     }
 }
+
+task check
