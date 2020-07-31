@@ -1,0 +1,82 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'org.jmailen.kotlinter'
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.0"
+
+    defaultConfig {
+        applicationId "com.juul.pommel.sample"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "com.juul.pommel.sample.HiltTestRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    kapt {
+        correctErrorTypes true
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
+    viewBinding {
+        enabled = true
+    }
+
+    hilt {
+        enableTransformForLocalTests = true
+    }
+}
+
+dependencies {
+    implementation project(':annotations')
+    kapt project(':compiler')
+
+    implementation deps.kotlin
+
+    implementation deps.dagger
+    implementation deps.daggerHilt
+    kapt deps.daggerHiltCompiler
+
+    implementation deps.androidx.constraintlayout
+    implementation deps.androidx.coreKtx
+    implementation deps.androidx.appCompat
+
+    testImplementation deps.junit
+    testImplementation deps.androidx.coreKtxTest
+    testImplementation deps.androidx.junit
+    testImplementation deps.androidx.rules
+    testImplementation deps.androidx.espresso
+    testImplementation "org.robolectric:robolectric:4.3.1"
+    testImplementation deps.daggerHiltTesting
+    kaptTest deps.daggerHiltCompiler
+    kaptTest project(':compiler')
+
+    androidTestImplementation deps.daggerHiltTesting
+    kaptAndroidTest deps.daggerHiltCompiler
+    kaptAndroidTest project(':compiler')
+    androidTestImplementation deps.junit
+    androidTestImplementation deps.androidx.junit
+    androidTestImplementation deps.androidx.rules
+    androidTestImplementation deps.androidx.espresso
+}
