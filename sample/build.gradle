@@ -24,13 +24,12 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-
     kotlinOptions {
         jvmTarget = "1.8"
     }
 
     kapt {
-        correctErrorTypes true
+        correctErrorTypes = true
     }
 
     testOptions {
@@ -67,7 +66,7 @@ dependencies {
     testImplementation deps.androidx.junit
     testImplementation deps.androidx.rules
     testImplementation deps.androidx.espresso
-    testImplementation "org.robolectric:robolectric:4.3.1"
+    testImplementation deps.robolectric
     testImplementation deps.daggerHiltTesting
     kaptTest deps.daggerHiltCompiler
     kaptTest project(':compiler')
