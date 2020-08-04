@@ -7,9 +7,19 @@ buildscript {
     ]
 
     ext.deps = [
+        'androidx'            : [
+            'appCompat'       : "androidx.appcompat:appcompat:1.1.0",
+            'constraintlayout': "androidx.constraintlayout:constraintlayout:1.1.3",
+            'coreKtx'         : "androidx.core:core-ktx:1.3.1",
+            'coreKtxTest'     : "androidx.test:core-ktx:1.2.0",
+            'espresso'        : "androidx.test.espresso:espresso-core:3.2.0",
+            'junit'           : "androidx.test.ext:junit:1.1.1",
+            'rules'           : "androidx.test:rules:1.1.0"
+        ],
         'dagger'              : "com.google.dagger:dagger:${versions.dagger}",
         'daggerHilt'          : "com.google.dagger:hilt-android:${versions.daggerHilt}",
-        'daggerCompiler'      : "com.google.dagger:dagger-compiler:${versions.dagger}",
+        'daggerHiltCompiler'  : "com.google.dagger:hilt-android-compiler:${versions.daggerHilt}",
+        'daggerHiltTesting'   : "com.google.dagger:hilt-android-testing:${versions.daggerHilt}",
         'autoService'         : 'com.google.auto.service:auto-service:1.0-rc7',
         'junit'               : 'junit:junit:4.13',
         'assertJ'             : "org.assertj:assertj-core:3.15.0",
@@ -18,6 +28,7 @@ buildscript {
         'kotlinTestCommon'    : "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}",
         'kotlinTestJunit'     : "org.jetbrains.kotlin:kotlin-test-junit:${versions.kotlin}",
         'javaPoet'            : 'com.squareup:javapoet:1.13.0',
+        'robolectric'         : "org.robolectric:robolectric:4.3.1",
         'inject'              : 'javax.inject:javax.inject:1',
         'incap'               : [
             'runtime'  : "net.ltgt.gradle.incap:incap:${versions.incap}",
@@ -29,7 +40,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
         classpath 'com.android.tools.build:gradle:4.0.1'
         classpath "org.jmailen.gradle:kotlinter-gradle:2.4.1"
-
+        classpath "com.google.dagger:hilt-android-gradle-plugin:${versions.daggerHilt}"
     }
 
     repositories {
