@@ -110,6 +110,8 @@ class PommelProcessor : AbstractProcessor() {
             valid = false
         }
 
+        if (!valid) return null
+
         val constructor = constructors.single()
         if (Modifier.PRIVATE in constructor.modifiers) {
             error("@Inject constructor must not be private.", constructor)
