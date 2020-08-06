@@ -12,6 +12,7 @@ import dagger.hilt.android.testing.UninstallModules
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import javax.inject.Named
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
@@ -33,6 +34,7 @@ class PommelSampleTest {
 
     @BindValue
     @JvmField
+    @field:Named("NameProvider")
     val testNameProvider: NameProvider = SpanishNameProvider()
 
     @BindValue
