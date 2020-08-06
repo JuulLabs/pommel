@@ -1088,6 +1088,7 @@ class PommelProcessorTests {
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.COMPILATION_ERROR)
         assertThat(result.messages).contains("error: Multiple constructors marked with @Inject annotated found")
+        assertThat(result.messages).doesNotContain("An exception occurred: java.lang.IllegalArgumentException: List has more than one element")
     }
 
     private fun prepareCompilation(vararg sourceFiles: SourceFile): KotlinCompilation {
