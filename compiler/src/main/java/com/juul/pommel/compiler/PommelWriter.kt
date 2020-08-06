@@ -17,6 +17,7 @@ import javax.lang.model.element.VariableElement
 private val MODULE = ClassName.get("dagger", "Module")
 private val PROVIDES = ClassName.get("dagger", "Provides")
 private val INSTALLIN = ClassName.get("dagger.hilt", "InstallIn")
+private val GENERATED = ClassName.get("javax.annotation", "Generated")
 
 class PommelWriter(
     val moduleType: TypeElement,
@@ -33,6 +34,12 @@ class PommelWriter(
     fun writeModule(): TypeSpec {
         return TypeSpec.classBuilder(generatedType)
             .addModifiers(Modifier.PUBLIC)
+            .addAnnotation(
+                AnnotationSpec.builder(GENERATED)
+                    .addMember("value", "\$S", PommelProcessor::class.qualifiedName)
+                    .addMember("comments", "\$S", "https://github.com/JuulLabs/pommel")
+                    .build()
+            )
             .addAnnotation(MODULE)
             .apply {
                 if (install && component != null) {
