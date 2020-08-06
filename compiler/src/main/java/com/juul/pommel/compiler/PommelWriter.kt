@@ -44,15 +44,13 @@ class PommelWriter(
                     )
                 }
             }
-            .apply {
-                addMethod(
-                    if (targetType == binds) {
-                        writeProvidesMethod()
-                    } else {
-                        writeBindsMethod()
-                    }
-                )
-            }
+            .addMethod(
+                if (targetType == binds) {
+                    writeProvidesMethod()
+                } else {
+                    writeBindsMethod()
+                }
+            )
             .build()
     }
 
