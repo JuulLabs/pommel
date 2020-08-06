@@ -1059,6 +1059,37 @@ class PommelProcessorTests {
         )
     }
 
+    @Test
+    fun `multiple inject constructor fails`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+          
+        
+          
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject
+          import javax.inject.Scope
+          
+          @Scope
+          annotation class CustomScope
+          
+          @SoloModule
+          @CustomScope
+          class SampleClass @Inject constructor(private val a: Int) {
+              
+              @Inject constructor(): this(10) 
+          }
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.COMPILATION_ERROR)
+        assertThat(result.messages).contains("error: Multiple constructors marked with @Inject annotated found")
+    }
+
     private fun prepareCompilation(vararg sourceFiles: SourceFile): KotlinCompilation {
         return KotlinCompilation().apply {
             workingDir = temporaryFolder.root
