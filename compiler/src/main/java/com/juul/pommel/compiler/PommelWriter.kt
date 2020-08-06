@@ -53,7 +53,7 @@ class PommelWriter(
                         addParameter(it.qualifiedType, it.simpleName.toString())
                     }
                     .addStatement(
-                        "return new \$T$>(\n\$L)$<", targetType,
+                        "return new \$T(\n\$L)", targetType,
                         parameters.map { CodeBlock.of("\$N", it.simpleName) }.joinToCode(",\n")
                     )
                     .build()
