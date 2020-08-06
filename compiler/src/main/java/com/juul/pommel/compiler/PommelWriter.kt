@@ -16,6 +16,7 @@ import javax.lang.model.element.VariableElement
 
 private val MODULE = ClassName.get("dagger", "Module")
 private val PROVIDES = ClassName.get("dagger", "Provides")
+private val BINDS = ClassName.get("dagger", "Binds")
 private val INSTALLIN = ClassName.get("dagger.hilt", "InstallIn")
 
 class PommelWriter(
@@ -32,7 +33,7 @@ class PommelWriter(
 
     fun writeModule(): TypeSpec {
         return TypeSpec.classBuilder(generatedType)
-            .addModifiers(Modifier.PUBLIC)
+            .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
             .addAnnotation(MODULE)
             .apply {
                 if (install && component != null) {
@@ -43,21 +44,41 @@ class PommelWriter(
                     )
                 }
             }
-            .addMethod(
-                MethodSpec.methodBuilder(targetType.rawClassName().provideFunctionName())
-                    .addAnnotation(PROVIDES)
-                    .apply { scope?.let { addAnnotation(it) } }
-                    .addModifiers(Modifier.PUBLIC)
-                    .returns(binds)
-                    .applyEach(parameters) {
-                        addParameter(it.qualifiedType, it.simpleName.toString())
+            .apply {
+                addMethod(
+                    if (targetType == binds) {
+                        writeProvidesMethod()
+                    } else {
+                        writeBindsMethod()
                     }
-                    .addStatement(
-                        "return new \$T(\n\$L)", targetType,
-                        parameters.map { CodeBlock.of("\$N", it.simpleName) }.joinToCode(",\n")
-                    )
-                    .build()
+                )
+            }
+            .build()
+    }
+
+    private fun writeProvidesMethod(): MethodSpec {
+        return MethodSpec.methodBuilder(targetType.rawClassName().provideFunctionName())
+            .addAnnotation(PROVIDES)
+            .apply { scope?.let { addAnnotation(it) } }
+            .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+            .returns(binds)
+            .applyEach(parameters) {
+                addParameter(it.qualifiedType, it.simpleName.toString())
+            }
+            .addStatement(
+                "return new \$T(\n\$L)", targetType,
+                parameters.map { CodeBlock.of("\$N", it.simpleName) }.joinToCode(",\n")
             )
+            .build()
+    }
+
+    private fun writeBindsMethod(): MethodSpec {
+        return MethodSpec.methodBuilder(targetType.rawClassName().bindsFunctionName())
+            .addAnnotation(BINDS)
+            .apply { scope?.let { addAnnotation(it) } }
+            .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+            .returns(binds)
+            .addParameter(targetType, targetType.rawClassName().simpleName().decapitalize())
             .build()
     }
 }
@@ -65,6 +86,8 @@ class PommelWriter(
 private fun TypeElement.toClassName(): ClassName = ClassName.get(this)
 
 private fun ClassName.provideFunctionName() = "provides_" + reflectionName().replace('.', '_')
+
+private fun ClassName.bindsFunctionName() = "binds_" + reflectionName().replace('.', '_')
 
 private fun ClassName.soloModuleName(): ClassName {
     return peerClassWithReflectionNesting(simpleName() + "_SoloModule")

@@ -45,9 +45,9 @@ class PommelProcessorTests {
          
          @Module
          @InstallIn(ApplicationComponent.class)
-         public class SampleClass_SoloModule {
+         public abstract class SampleClass_SoloModule {
            @Provides
-           public SampleClass provides_test_SampleClass() {
+           public static SampleClass provides_test_SampleClass() {
              return new SampleClass(
                  );
            }
@@ -83,9 +83,9 @@ class PommelProcessorTests {
          import dagger.Provides;
          
          @Module
-         public class SampleClass_SoloModule {
+         public abstract class SampleClass_SoloModule {
            @Provides
-           public SampleClass provides_test_SampleClass() {
+           public static SampleClass provides_test_SampleClass() {
              return new SampleClass(
                  );
            }
@@ -127,10 +127,10 @@ class PommelProcessorTests {
          
          @Module
          @InstallIn(ApplicationComponent.class)
-         public class SampleClass_SoloModule {
+         public abstract class SampleClass_SoloModule {
            @Provides
            @Singleton
-           public SampleClass provides_test_SampleClass() {
+           public static SampleClass provides_test_SampleClass() {
              return new SampleClass(
                  );
            }
@@ -172,10 +172,10 @@ class PommelProcessorTests {
          
          @Module
          @InstallIn(ActivityRetainedComponent.class)
-         public class SampleClass_SoloModule {
+         public abstract class SampleClass_SoloModule {
            @Provides
            @ActivityRetainedScoped
-           public SampleClass provides_test_SampleClass() {
+           public static SampleClass provides_test_SampleClass() {
              return new SampleClass(
                  );
            }
@@ -217,10 +217,10 @@ class PommelProcessorTests {
          
          @Module
          @InstallIn(ActivityComponent.class)
-         public class SampleClass_SoloModule {
+         public abstract class SampleClass_SoloModule {
            @Provides
            @ActivityScoped
-           public SampleClass provides_test_SampleClass() {
+           public static SampleClass provides_test_SampleClass() {
              return new SampleClass(
                  );
            }
@@ -262,10 +262,10 @@ class PommelProcessorTests {
          
          @Module
          @InstallIn(FragmentComponent.class)
-         public class SampleClass_SoloModule {
+         public abstract class SampleClass_SoloModule {
            @Provides
            @FragmentScoped
-           public SampleClass provides_test_SampleClass() {
+           public static SampleClass provides_test_SampleClass() {
              return new SampleClass(
                  );
            }
@@ -307,10 +307,10 @@ class PommelProcessorTests {
          
          @Module
          @InstallIn(ServiceComponent.class)
-         public class SampleClass_SoloModule {
+         public abstract class SampleClass_SoloModule {
            @Provides
            @ServiceScoped
-           public SampleClass provides_test_SampleClass() {
+           public static SampleClass provides_test_SampleClass() {
              return new SampleClass(
                  );
            }
@@ -352,10 +352,10 @@ class PommelProcessorTests {
          
          @Module
          @InstallIn(ViewComponent.class)
-         public class SampleClass_SoloModule {
+         public abstract class SampleClass_SoloModule {
            @Provides
            @ViewScoped
-           public SampleClass provides_test_SampleClass() {
+           public static SampleClass provides_test_SampleClass() {
              return new SampleClass(
                  );
            }
@@ -427,10 +427,10 @@ class PommelProcessorTests {
          import dagger.Provides;
          
          @Module
-         public class SampleClass_SoloModule {
+         public abstract class SampleClass_SoloModule {
            @Provides
            @CustomScope
-           public SampleClass provides_test_SampleClass() {
+           public static SampleClass provides_test_SampleClass() {
              return new SampleClass(
                  );
            }
@@ -477,10 +477,10 @@ class PommelProcessorTests {
          
          @Module
          @InstallIn(ApplicationComponent.class)
-         public class SampleClass_SoloModule {
+         public abstract class SampleClass_SoloModule {
            @Provides
            @Singleton
-           public SampleClass provides_test_SampleClass(int a, String b, double c) {
+           public static SampleClass provides_test_SampleClass(int a, String b, double c) {
              return new SampleClass(
                  a,
                  b,
@@ -532,10 +532,10 @@ class PommelProcessorTests {
          
          @Module
          @InstallIn(ApplicationComponent.class)
-         public class SampleClass_SoloModule {
+         public abstract class SampleClass_SoloModule {
            @Provides
            @Singleton
-           public SampleClass provides_test_SampleClass(@Named("a") int a, String b, double c,
+           public static SampleClass provides_test_SampleClass(@Named("a") int a, String b, double c,
                @Named("b") byte d) {
              return new SampleClass(
                  a,
@@ -565,7 +565,7 @@ class PommelProcessorTests {
           @SoloModule(AbstractClass::class)
           @Singleton
           class SampleClass @Inject constructor(
-              @Named("a" ) val a: Int,
+              @Named("a") val a: Int,
               val b: String,
               val c: Double,
               @Named("b") val d: Byte
@@ -581,27 +581,18 @@ class PommelProcessorTests {
             """
          package test;
 
+         import dagger.Binds;
          import dagger.Module;
-         import dagger.Provides;
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ApplicationComponent;
-         import java.lang.String;
-         import javax.inject.Named;
          import javax.inject.Singleton;
          
          @Module
          @InstallIn(ApplicationComponent.class)
-         public class SampleClass_SoloModule {
-           @Provides
+         public abstract class SampleClass_SoloModule {
+           @Binds
            @Singleton
-           public AbstractClass provides_test_SampleClass(@Named("a") int a, String b, double c,
-               @Named("b") byte d) {
-             return new SampleClass(
-                 a,
-                 b,
-                 c,
-                 d);
-           }
+           public abstract AbstractClass binds_test_SampleClass(SampleClass sampleClass);
          }"""
         )
     }
@@ -640,27 +631,18 @@ class PommelProcessorTests {
             """
          package test;
 
+         import dagger.Binds;
          import dagger.Module;
-         import dagger.Provides;
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ApplicationComponent;
-         import java.lang.String;
-         import javax.inject.Named;
          import javax.inject.Singleton;
          
          @Module
          @InstallIn(ApplicationComponent.class)
-         public class SampleClass_SoloModule {
-           @Provides
+         public abstract class SampleClass_SoloModule {
+           @Binds
            @Singleton
-           public TestInterface provides_test_SampleClass(@Named("a") int a, String b, double c,
-               @Named("b") byte d) {
-             return new SampleClass(
-                 a,
-                 b,
-                 c,
-                 d);
-           }
+           public abstract TestInterface binds_test_SampleClass(SampleClass sampleClass);
          }"""
         )
     }
@@ -701,27 +683,18 @@ class PommelProcessorTests {
             """
          package test;
 
+         import dagger.Binds;
          import dagger.Module;
-         import dagger.Provides;
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ApplicationComponent;
-         import java.lang.String;
-         import javax.inject.Named;
          import javax.inject.Singleton;
          
          @Module
          @InstallIn(ApplicationComponent.class)
-         public class SampleClass_SoloModule {
-           @Provides
+         public abstract class SampleClass_SoloModule {
+           @Binds
            @Singleton
-           public SecondTestInterface provides_test_SampleClass(@Named("a") int a, String b, double c,
-               @Named("b") byte d) {
-             return new SampleClass(
-                 a,
-                 b,
-                 c,
-                 d);
-           }
+           public abstract SecondTestInterface binds_test_SampleClass(SampleClass sampleClass);
          }"""
         )
     }
@@ -770,10 +743,10 @@ class PommelProcessorTests {
          
          @Module
          @InstallIn(ApplicationComponent.class)
-         public class SampleClass_SoloModule {
+         public abstract class SampleClass_SoloModule {
            @Provides
            @Singleton
-           public SampleClass provides_test_SampleClass(@Named("a") int a, String b, double c,
+           public static SampleClass provides_test_SampleClass(@Named("a") int a, String b, double c,
                @Named("b") byte d) {
              return new SampleClass(
                  a,
@@ -831,10 +804,10 @@ class PommelProcessorTests {
          
          @Module
          @InstallIn(ApplicationComponent.class)
-         public class SampleClass_SoloModule {
+         public abstract class SampleClass_SoloModule {
            @Provides
            @Singleton
-           public SampleClass provides_test_SampleClass(@Named("a") int a, String b, double c,
+           public static SampleClass provides_test_SampleClass(@Named("a") int a, String b, double c,
                @Named("b") byte d) {
              return new SampleClass(
                  a,
@@ -892,10 +865,10 @@ class PommelProcessorTests {
          
          @Module
          @InstallIn(ApplicationComponent.class)
-         public class SampleClass_SoloModule {
+         public abstract class SampleClass_SoloModule {
            @Provides
            @Singleton
-           public SampleClass provides_test_SampleClass(@Named("a") int a, String b, double c,
+           public static SampleClass provides_test_SampleClass(@Named("a") int a, String b, double c,
                @Named("b") byte d) {
              return new SampleClass(
                  a,
@@ -943,27 +916,18 @@ class PommelProcessorTests {
             """
          package test;
 
+         import dagger.Binds;
          import dagger.Module;
-         import dagger.Provides;
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ApplicationComponent;
-         import java.lang.String;
-         import javax.inject.Named;
          import javax.inject.Singleton;
          
          @Module
          @InstallIn(ApplicationComponent.class)
-         public class SampleClass_SoloModule {
-           @Provides
+         public abstract class SampleClass_SoloModule {
+           @Binds
            @Singleton
-           public AbstractClass provides_test_SampleClass(@Named("a") int a, String b, double c,
-               @Named("b") byte d) {
-             return new SampleClass(
-                 a,
-                 b,
-                 c,
-                 d);
-           }
+           public abstract AbstractClass binds_test_SampleClass(SampleClass sampleClass);
          }"""
         )
     }
@@ -1049,9 +1013,9 @@ class PommelProcessorTests {
          
          @Module
          @InstallIn(ApplicationComponent.class)
-         public class SampleClass${'$'}InnerClass_SoloModule {
+         public abstract class SampleClass${'$'}InnerClass_SoloModule {
            @Provides
-           public SampleClass.InnerClass provides_test_SampleClass${'$'}InnerClass() {
+           public static SampleClass.InnerClass provides_test_SampleClass${'$'}InnerClass() {
              return new SampleClass.InnerClass(
                  );
            }
