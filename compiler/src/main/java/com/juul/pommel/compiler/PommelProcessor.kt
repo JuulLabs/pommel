@@ -7,6 +7,7 @@ import com.juul.pommel.compiler.internal.ACTIVITY_SCOPED
 import com.juul.pommel.compiler.internal.FRAGMENT_SCOPED
 import com.juul.pommel.compiler.internal.INJECT_ANNOTATION
 import com.juul.pommel.compiler.internal.JAVA_VOID
+import com.juul.pommel.compiler.internal.QUALIFIER_ANNOTATION
 import com.juul.pommel.compiler.internal.SCOPE_ANNOTATION
 import com.juul.pommel.compiler.internal.SERVICE_SCOPED
 import com.juul.pommel.compiler.internal.SINGLETON_SCOPED
@@ -132,6 +133,12 @@ class PommelProcessor : AbstractProcessor() {
             AnnotationSpec.get(it)
         }
 
+        val qualifier = annotationMirrors.find {
+            it.annotationType.asElement().hasAnnotation(QUALIFIER_ANNOTATION)
+        }?.let {
+            AnnotationSpec.get(it)
+        }
+
         val component = if (scope != null) {
             when (scope.type.toString()) {
                 SINGLETON_SCOPED -> applicationComponent
@@ -157,6 +164,7 @@ class PommelProcessor : AbstractProcessor() {
             moduleType = this,
             targetType = this.asType().toTypeName(),
             scope = scope,
+            qualifier = qualifier,
             component = component,
             parameters = constructor.parameters,
             install = install,
