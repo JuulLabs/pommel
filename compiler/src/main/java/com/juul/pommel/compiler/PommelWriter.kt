@@ -1,5 +1,6 @@
 package com.juul.pommel.compiler
 
+import com.juul.pommel.compiler.internal.QUALIFIER_ANNOTATION
 import com.juul.pommel.compiler.internal.applyEach
 import com.juul.pommel.compiler.internal.hasAnnotation
 import com.juul.pommel.compiler.internal.toTypeName
@@ -23,6 +24,7 @@ class PommelWriter(
     val moduleType: TypeElement,
     val targetType: TypeName,
     val scope: AnnotationSpec?,
+    val qualifier: AnnotationSpec?,
     val component: ClassName?,
     val parameters: List<VariableElement>,
     val install: Boolean,
@@ -54,6 +56,7 @@ class PommelWriter(
                 MethodSpec.methodBuilder(targetType.rawClassName().provideFunctionName())
                     .addAnnotation(PROVIDES)
                     .apply { scope?.let { addAnnotation(it) } }
+                    .apply { qualifier?.let { addAnnotation(it) } }
                     .addModifiers(Modifier.PUBLIC)
                     .returns(binds)
                     .applyEach(parameters) {
@@ -103,7 +106,7 @@ private val VariableElement.qualifiedType: TypeName
 
 private fun VariableElement.qualifier(): AnnotationSpec? {
     return annotationMirrors.find {
-        it.annotationType.asElement().hasAnnotation("javax.inject.Qualifier")
+        it.annotationType.asElement().hasAnnotation(QUALIFIER_ANNOTATION)
     }?.let { AnnotationSpec.get(it) }
 }
 
