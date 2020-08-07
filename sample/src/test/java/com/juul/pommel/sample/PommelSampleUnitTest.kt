@@ -15,6 +15,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import javax.inject.Named
 
 /**
  * Roboeletric has limitation with Dagger-Hilt. Running this test from the IDE will fail.
@@ -45,6 +46,7 @@ class PommelSampleUnitTest {
 
     @BindValue
     @JvmField
+    @field:Named("NameProvider")
     val frenchNameProvider: NameProvider = FrenchNameProvider()
 
     @Test

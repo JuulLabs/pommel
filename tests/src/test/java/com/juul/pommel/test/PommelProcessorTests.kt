@@ -1091,6 +1091,67 @@ class PommelProcessorTests {
         assertThat(result.messages).doesNotContain("An exception occurred: java.lang.IllegalArgumentException: List has more than one element")
     }
 
+    @Test
+    fun `bind interface with qualifier`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+          
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject
+          import javax.inject.Named
+          import javax.inject.Singleton 
+          
+          interface TestInterface
+          
+          @SoloModule(TestInterface::class)
+          @Singleton
+          @Named("test")
+          class SampleClass @Inject constructor(
+              @Named("a" ) val a: Int,
+              val b: String,
+              val c: Double,
+              @Named("b") val d: Byte
+          ) : TestInterface
+
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("SampleClass_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+
+         import dagger.Module;
+         import dagger.Provides;
+         import dagger.hilt.InstallIn;
+         import dagger.hilt.android.components.ApplicationComponent;
+         import java.lang.String;
+         import javax.inject.Named;
+         import javax.inject.Singleton;
+         
+         @Module
+         @InstallIn(ApplicationComponent.class)
+         public class SampleClass_SoloModule {
+           @Provides
+           @Singleton
+           @Named("test")
+           public TestInterface provides_test_SampleClass(@Named("a") int a, String b, double c,
+               @Named("b") byte d) {
+             return new SampleClass(
+                 a,
+                 b,
+                 c,
+                 d);
+           }
+         }"""
+        )
+    }
+
     private fun prepareCompilation(vararg sourceFiles: SourceFile): KotlinCompilation {
         return KotlinCompilation().apply {
             workingDir = temporaryFolder.root
