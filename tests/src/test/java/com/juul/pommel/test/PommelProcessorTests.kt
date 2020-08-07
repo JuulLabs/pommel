@@ -1175,9 +1175,11 @@ class PommelProcessorTests {
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ApplicationComponent;
          import java.lang.String;
+         import javax.annotation.Generated;
          import javax.inject.Named;
          import javax.inject.Singleton;
          
+         $GENERATED_ANNOTATION
          @Module
          @InstallIn(ApplicationComponent.class)
          public class SampleClass_SoloModule {
