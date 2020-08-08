@@ -54,6 +54,9 @@ class PommelWriter(
                 }
             }
             .addMethod(
+                // if the value of binds is equal to the target class annotated with @SoloModule
+                // then we generate a provides method otherwise the value of the target class is a
+                // implementation of binds and we generate a binds method
                 if (targetType == binds) {
                     writeProvidesMethod()
                 } else {
