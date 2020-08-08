@@ -66,8 +66,8 @@ class PommelWriter(
     private fun writeProvidesMethod(): MethodSpec {
         return MethodSpec.methodBuilder(targetType.rawClassName().provideFunctionName())
             .addAnnotation(PROVIDES)
-            .apply { scope?.let { addAnnotation(it) } }
-            .apply { qualifier?.let { addAnnotation(it) } }
+            .apply { if (scope != null) addAnnotation(scope) }
+            .apply { if (qualifier != null) addAnnotation(qualifier) }
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
             .returns(binds)
             .applyEach(parameters) {
@@ -83,8 +83,8 @@ class PommelWriter(
     private fun writeBindsMethod(): MethodSpec {
         return MethodSpec.methodBuilder(targetType.rawClassName().bindsFunctionName())
             .addAnnotation(BINDS)
-            .apply { scope?.let { addAnnotation(it) } }
-            .apply { qualifier?.let { addAnnotation(it) } }
+            .apply { if (scope != null) addAnnotation(scope) }
+            .apply { if (qualifier != null) addAnnotation(qualifier) }
             .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
             .returns(binds)
             .addParameter(targetType, targetType.rawClassName().simpleName().decapitalize())
