@@ -1134,11 +1134,10 @@ class PommelProcessorTests {
             """
          package test;
 
+         import dagger.Binds;
          import dagger.Module;
-         import dagger.Provides;
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ApplicationComponent;
-         import java.lang.String;
          import javax.annotation.Generated;
          import javax.inject.Named;
          import javax.inject.Singleton;
@@ -1146,18 +1145,11 @@ class PommelProcessorTests {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(ApplicationComponent.class)
-         public class SampleClass_SoloModule {
-           @Provides
+         public abstract class SampleClass_SoloModule {
+           @Binds
            @Singleton
            @Named("test")
-           public TestInterface provides_test_SampleClass(@Named("a") int a, String b, double c,
-               @Named("b") byte d) {
-             return new SampleClass(
-                 a,
-                 b,
-                 c,
-                 d);
-           }
+           public abstract TestInterface binds_test_SampleClass(SampleClass sampleClass);
          }"""
         )
     }
