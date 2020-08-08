@@ -1,5 +1,6 @@
 package com.juul.pommel.compiler
 
+import com.juul.pommel.compiler.internal.QUALIFIER_ANNOTATION
 import com.juul.pommel.compiler.internal.applyEach
 import com.juul.pommel.compiler.internal.hasAnnotation
 import com.juul.pommel.compiler.internal.toTypeName
@@ -18,11 +19,13 @@ private val MODULE = ClassName.get("dagger", "Module")
 private val PROVIDES = ClassName.get("dagger", "Provides")
 private val BINDS = ClassName.get("dagger", "Binds")
 private val INSTALLIN = ClassName.get("dagger.hilt", "InstallIn")
+private val GENERATED = ClassName.get("javax.annotation", "Generated")
 
 class PommelWriter(
     val moduleType: TypeElement,
     val targetType: TypeName,
     val scope: AnnotationSpec?,
+    val qualifier: AnnotationSpec?,
     val component: ClassName?,
     val parameters: List<VariableElement>,
     val install: Boolean,
@@ -34,6 +37,12 @@ class PommelWriter(
     fun writeModule(): TypeSpec {
         return TypeSpec.classBuilder(generatedType)
             .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+            .addAnnotation(
+                AnnotationSpec.builder(GENERATED)
+                    .addMember("value", "\$S", PommelProcessor::class.qualifiedName)
+                    .addMember("comments", "\$S", "https://github.com/JuulLabs/pommel")
+                    .build()
+            )
             .addAnnotation(MODULE)
             .apply {
                 if (install && component != null) {
@@ -58,6 +67,7 @@ class PommelWriter(
         return MethodSpec.methodBuilder(targetType.rawClassName().provideFunctionName())
             .addAnnotation(PROVIDES)
             .apply { scope?.let { addAnnotation(it) } }
+            .apply { qualifier?.let { addAnnotation(it) } }
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
             .returns(binds)
             .applyEach(parameters) {
@@ -74,6 +84,7 @@ class PommelWriter(
         return MethodSpec.methodBuilder(targetType.rawClassName().bindsFunctionName())
             .addAnnotation(BINDS)
             .apply { scope?.let { addAnnotation(it) } }
+            .apply { qualifier?.let { addAnnotation(it) } }
             .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
             .returns(binds)
             .addParameter(targetType, targetType.rawClassName().simpleName().decapitalize())
@@ -117,7 +128,7 @@ private val VariableElement.qualifiedType: TypeName
 
 private fun VariableElement.qualifier(): AnnotationSpec? {
     return annotationMirrors.find {
-        it.annotationType.asElement().hasAnnotation("javax.inject.Qualifier")
+        it.annotationType.asElement().hasAnnotation(QUALIFIER_ANNOTATION)
     }?.let { AnnotationSpec.get(it) }
 }
 

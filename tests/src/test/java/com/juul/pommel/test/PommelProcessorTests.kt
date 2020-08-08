@@ -9,6 +9,12 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import kotlin.test.Test
 
+private const val GENERATED_ANNOTATION =
+    """@Generated(
+             value = "com.juul.pommel.compiler.PommelProcessor",
+             comments = "https://github.com/JuulLabs/pommel"
+         )"""
+
 class PommelProcessorTests {
 
     @Rule
@@ -42,7 +48,9 @@ class PommelProcessorTests {
          import dagger.Provides;
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ApplicationComponent;
+         import javax.annotation.Generated;
          
+         $GENERATED_ANNOTATION
          @Module
          @InstallIn(ApplicationComponent.class)
          public abstract class SampleClass_SoloModule {
@@ -56,7 +64,7 @@ class PommelProcessorTests {
     }
 
     @Test
-    fun `install is false `() {
+    fun `install is false`() {
         val result = compile(
             SourceFile.kotlin(
                 "source.kt",
@@ -81,7 +89,9 @@ class PommelProcessorTests {
          
          import dagger.Module;
          import dagger.Provides;
+         import javax.annotation.Generated;
          
+         $GENERATED_ANNOTATION
          @Module
          public abstract class SampleClass_SoloModule {
            @Provides
@@ -123,8 +133,10 @@ class PommelProcessorTests {
          import dagger.Provides;
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ApplicationComponent;
+         import javax.annotation.Generated;
          import javax.inject.Singleton;
          
+         $GENERATED_ANNOTATION
          @Module
          @InstallIn(ApplicationComponent.class)
          public abstract class SampleClass_SoloModule {
@@ -169,7 +181,9 @@ class PommelProcessorTests {
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ActivityRetainedComponent;
          import dagger.hilt.android.scopes.ActivityRetainedScoped;
+         import javax.annotation.Generated;
          
+         $GENERATED_ANNOTATION
          @Module
          @InstallIn(ActivityRetainedComponent.class)
          public abstract class SampleClass_SoloModule {
@@ -214,7 +228,9 @@ class PommelProcessorTests {
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ActivityComponent;
          import dagger.hilt.android.scopes.ActivityScoped;
+         import javax.annotation.Generated;
          
+         $GENERATED_ANNOTATION
          @Module
          @InstallIn(ActivityComponent.class)
          public abstract class SampleClass_SoloModule {
@@ -259,7 +275,9 @@ class PommelProcessorTests {
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.FragmentComponent;
          import dagger.hilt.android.scopes.FragmentScoped;
+         import javax.annotation.Generated;
          
+         $GENERATED_ANNOTATION
          @Module
          @InstallIn(FragmentComponent.class)
          public abstract class SampleClass_SoloModule {
@@ -304,7 +322,9 @@ class PommelProcessorTests {
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ServiceComponent;
          import dagger.hilt.android.scopes.ServiceScoped;
+         import javax.annotation.Generated;
          
+         $GENERATED_ANNOTATION
          @Module
          @InstallIn(ServiceComponent.class)
          public abstract class SampleClass_SoloModule {
@@ -349,7 +369,9 @@ class PommelProcessorTests {
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ViewComponent;
          import dagger.hilt.android.scopes.ViewScoped;
+         import javax.annotation.Generated;
          
+         $GENERATED_ANNOTATION
          @Module
          @InstallIn(ViewComponent.class)
          public abstract class SampleClass_SoloModule {
@@ -425,7 +447,9 @@ class PommelProcessorTests {
 
          import dagger.Module;
          import dagger.Provides;
-         
+         import javax.annotation.Generated;
+
+         $GENERATED_ANNOTATION
          @Module
          public abstract class SampleClass_SoloModule {
            @Provides
@@ -473,8 +497,10 @@ class PommelProcessorTests {
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ApplicationComponent;
          import java.lang.String;
+         import javax.annotation.Generated;
          import javax.inject.Singleton;
          
+         $GENERATED_ANNOTATION
          @Module
          @InstallIn(ApplicationComponent.class)
          public abstract class SampleClass_SoloModule {
@@ -527,9 +553,11 @@ class PommelProcessorTests {
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ApplicationComponent;
          import java.lang.String;
+         import javax.annotation.Generated;
          import javax.inject.Named;
          import javax.inject.Singleton;
          
+         $GENERATED_ANNOTATION
          @Module
          @InstallIn(ApplicationComponent.class)
          public abstract class SampleClass_SoloModule {
@@ -585,8 +613,10 @@ class PommelProcessorTests {
          import dagger.Module;
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ApplicationComponent;
+         import javax.annotation.Generated;
          import javax.inject.Singleton;
-         
+
+         $GENERATED_ANNOTATION
          @Module
          @InstallIn(ApplicationComponent.class)
          public abstract class SampleClass_SoloModule {
@@ -635,8 +665,10 @@ class PommelProcessorTests {
          import dagger.Module;
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ApplicationComponent;
+         import javax.annotation.Generated;
          import javax.inject.Singleton;
          
+         $GENERATED_ANNOTATION
          @Module
          @InstallIn(ApplicationComponent.class)
          public abstract class SampleClass_SoloModule {
@@ -687,8 +719,10 @@ class PommelProcessorTests {
          import dagger.Module;
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ApplicationComponent;
+         import javax.annotation.Generated;
          import javax.inject.Singleton;
          
+         $GENERATED_ANNOTATION
          @Module
          @InstallIn(ApplicationComponent.class)
          public abstract class SampleClass_SoloModule {
@@ -738,9 +772,11 @@ class PommelProcessorTests {
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ApplicationComponent;
          import java.lang.String;
+         import javax.annotation.Generated;
          import javax.inject.Named;
          import javax.inject.Singleton;
          
+         $GENERATED_ANNOTATION
          @Module
          @InstallIn(ApplicationComponent.class)
          public abstract class SampleClass_SoloModule {
@@ -799,9 +835,11 @@ class PommelProcessorTests {
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ApplicationComponent;
          import java.lang.String;
+         import javax.annotation.Generated;
          import javax.inject.Named;
          import javax.inject.Singleton;
          
+         $GENERATED_ANNOTATION
          @Module
          @InstallIn(ApplicationComponent.class)
          public abstract class SampleClass_SoloModule {
@@ -860,9 +898,11 @@ class PommelProcessorTests {
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ApplicationComponent;
          import java.lang.String;
+         import javax.annotation.Generated;
          import javax.inject.Named;
          import javax.inject.Singleton;
          
+         $GENERATED_ANNOTATION
          @Module
          @InstallIn(ApplicationComponent.class)
          public abstract class SampleClass_SoloModule {
@@ -920,8 +960,10 @@ class PommelProcessorTests {
          import dagger.Module;
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ApplicationComponent;
+         import javax.annotation.Generated;
          import javax.inject.Singleton;
          
+         $GENERATED_ANNOTATION
          @Module
          @InstallIn(ApplicationComponent.class)
          public abstract class SampleClass_SoloModule {
@@ -1010,7 +1052,9 @@ class PommelProcessorTests {
          import dagger.Provides;
          import dagger.hilt.InstallIn;
          import dagger.hilt.android.components.ApplicationComponent;
+         import javax.annotation.Generated;
          
+         $GENERATED_ANNOTATION
          @Module
          @InstallIn(ApplicationComponent.class)
          public abstract class SampleClass${'$'}InnerClass_SoloModule {
@@ -1018,6 +1062,101 @@ class PommelProcessorTests {
            public static SampleClass.InnerClass provides_test_SampleClass${'$'}InnerClass() {
              return new SampleClass.InnerClass(
                  );
+           }
+         }"""
+        )
+    }
+
+    @Test
+    fun `multiple inject constructor fails`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+          
+        
+          
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject
+          import javax.inject.Scope
+          
+          @Scope
+          annotation class CustomScope
+          
+          @SoloModule
+          @CustomScope
+          class SampleClass @Inject constructor(private val a: Int) {
+              
+              @Inject constructor(): this(10) 
+          }
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.COMPILATION_ERROR)
+        assertThat(result.messages).contains("error: Multiple constructors marked with @Inject annotated found")
+        assertThat(result.messages).doesNotContain("An exception occurred: java.lang.IllegalArgumentException: List has more than one element")
+    }
+
+    @Test
+    fun `bind interface with qualifier`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+          
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject
+          import javax.inject.Named
+          import javax.inject.Singleton 
+          
+          interface TestInterface
+          
+          @SoloModule(TestInterface::class)
+          @Singleton
+          @Named("test")
+          class SampleClass @Inject constructor(
+              @Named("a" ) val a: Int,
+              val b: String,
+              val c: Double,
+              @Named("b") val d: Byte
+          ) : TestInterface
+
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("SampleClass_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+
+         import dagger.Module;
+         import dagger.Provides;
+         import dagger.hilt.InstallIn;
+         import dagger.hilt.android.components.ApplicationComponent;
+         import java.lang.String;
+         import javax.annotation.Generated;
+         import javax.inject.Named;
+         import javax.inject.Singleton;
+         
+         $GENERATED_ANNOTATION
+         @Module
+         @InstallIn(ApplicationComponent.class)
+         public class SampleClass_SoloModule {
+           @Provides
+           @Singleton
+           @Named("test")
+           public TestInterface provides_test_SampleClass(@Named("a") int a, String b, double c,
+               @Named("b") byte d) {
+             return new SampleClass(
+                 a,
+                 b,
+                 c,
+                 d);
            }
          }"""
         )

@@ -7,6 +7,7 @@ import com.juul.pommel.compiler.internal.ACTIVITY_SCOPED
 import com.juul.pommel.compiler.internal.FRAGMENT_SCOPED
 import com.juul.pommel.compiler.internal.INJECT_ANNOTATION
 import com.juul.pommel.compiler.internal.JAVA_VOID
+import com.juul.pommel.compiler.internal.QUALIFIER_ANNOTATION
 import com.juul.pommel.compiler.internal.SCOPE_ANNOTATION
 import com.juul.pommel.compiler.internal.SERVICE_SCOPED
 import com.juul.pommel.compiler.internal.SINGLETON_SCOPED
@@ -110,6 +111,8 @@ class PommelProcessor : AbstractProcessor() {
             valid = false
         }
 
+        if (!valid) return null
+
         val constructor = constructors.single()
         if (Modifier.PRIVATE in constructor.modifiers) {
             error("@Inject constructor must not be private.", constructor)
@@ -126,6 +129,12 @@ class PommelProcessor : AbstractProcessor() {
 
         val scope = annotationMirrors.find {
             it.annotationType.asElement().hasAnnotation(SCOPE_ANNOTATION)
+        }?.let {
+            AnnotationSpec.get(it)
+        }
+
+        val qualifier = annotationMirrors.find {
+            it.annotationType.asElement().hasAnnotation(QUALIFIER_ANNOTATION)
         }?.let {
             AnnotationSpec.get(it)
         }
@@ -155,6 +164,7 @@ class PommelProcessor : AbstractProcessor() {
             moduleType = this,
             targetType = this.asType().toTypeName(),
             scope = scope,
+            qualifier = qualifier,
             component = component,
             parameters = constructor.parameters,
             install = install,

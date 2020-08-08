@@ -134,6 +134,34 @@ public abstract class SampleClass_SoloModule {
 }
 ```
 
+You can annotate your class with a qualifier:
+
+```kotlin
+interface MyInterface
+
+@SoloModule(MyInterface::class)
+@Singleton
+@Named("sample")
+class SampleClass @Inject constructor(
+    @Named("a") val a: Int,
+    val b: String
+) : MyInterface
+```
+
+Will generate the equivalent of:
+
+```java
+@Module
+public class SampleClass_SoloModule {
+  @Provides
+  @Singleton
+  @Named("sample")
+  public MyInterface provides_SampleClass(@Named("a") int a, String b) {
+    return new SampleClass(a, b);
+  }
+}
+```
+
 # Testing
 
 Pommel was intended to be used for testing with Dagger-Hilt. Simply mark the element you'd like to replace in test with `@SoloModule`, then uninstall the resulting generated module in your test to provide your own test implementation:
