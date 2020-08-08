@@ -1,5 +1,7 @@
 # Pommel
 
+[![Actions Status](https://github.com/JuulLabs/pommel/workflows/CI/badge.svg)](https://github.com/JuulLabs/pommel/actions)
+
 Pommel is an annotation processor for Dagger projects to generate a module with a single binding
 
 # Motivation
