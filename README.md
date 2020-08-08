@@ -50,10 +50,10 @@ Will generate the equivalent of:
 ```java
 @Module
 @InstallIn(ApplicationComponent.class)
-public class SampleClass_SoloModule {
+public abstract class SampleClass_SoloModule {
   @Provides
   @Singleton
-  public SampleClass provides_SampleClass(@Named("a") int a, String b) {
+  public static SampleClass provides_SampleClass(@Named("a") int a, String b) {
     return new SampleClass(a, b);
   }
 }
@@ -75,10 +75,10 @@ Will generate the equivalent of:
 
 ```java
 @Module
-public class SampleClass_SoloModule {
+public abstract class SampleClass_SoloModule {
   @Provides
   @Singleton
-  public SampleClass provides_SampleClass(@Named("a") int a, String b) {
+  public static SampleClass provides_SampleClass(@Named("a") int a, String b) {
     return new SampleClass(a, b);
   }
 }
@@ -101,10 +101,10 @@ Will generate the equivalent of:
 
 ```java
 @Module
-public class SampleClass_SoloModule {
+public abstract class SampleClass_SoloModule {
   @Provides
   @Singleton
-  public SampleClass provides_SampleClass(@Named("a") int a, String b) {
+  public static SampleClass provides_SampleClass(@Named("a") int a, String b) {
     return new SampleClass(a, b);
   }
 }
@@ -127,12 +127,10 @@ Will generate the equivalent of:
 
 ```java
 @Module
-public class SampleClass_SoloModule {
-  @Provides
+public abstract class SampleClass_SoloModule {
+  @Binds
   @Singleton
-  public MyInterface provides_SampleClass(@Named("a") int a, String b) {
-    return new SampleClass(a, b);
-  }
+  public abstract MyInterface binds_SampleClass(SampleClass sampleClass);
 }
 ```
 
@@ -155,12 +153,10 @@ Will generate the equivalent of:
 ```java
 @Module
 public class SampleClass_SoloModule {
-  @Provides
+  @Binds
   @Singleton
   @Named("sample")
-  public MyInterface provides_SampleClass(@Named("a") int a, String b) {
-    return new SampleClass(a, b);
-  }
+  public abstract MyInterface provides_SampleClass(SampleClass sampleClass);
 }
 ```
 
@@ -172,7 +168,7 @@ Pommel was intended to be used for testing with Dagger-Hilt. Simply mark the ele
 @SoloModule
 @Singleton
 class MyService @Inject constructor(
-    @Named("a" ) val a: Int,
+    @Named("a") val a: Int,
     val b: String
 )
 ```
