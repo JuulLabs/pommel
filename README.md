@@ -153,12 +153,10 @@ Will generate the equivalent of:
 ```java
 @Module
 public class SampleClass_SoloModule {
-  @Provides
+  @Binds
   @Singleton
   @Named("sample")
-  public MyInterface provides_SampleClass(@Named("a") int a, String b) {
-    return new SampleClass(a, b);
-  }
+  public abstract MyInterface provides_SampleClass(SampleClass sampleClass);
 }
 ```
 
