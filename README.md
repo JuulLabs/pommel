@@ -199,11 +199,19 @@ that all parameters passed into the constructor are also on the Dagger graph.
 
 # Download
 
-```
-implementation "com.juul.pommel:annotations:$version"
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.juul.pommel/compiler/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.juul.pommel/compiler)
 
-kaptAndroidTest "com.juul.pommel:compiler:$version" // for android tests
-kaptTest "com.juul.pommel:compiler:$version" // for unit tests
+```groovy
+repositories {
+    jcenter() // or mavenCentral()
+}
+
+dependencies {
+    implementation "com.juul.pommel:annotations:$version"
+
+    kaptAndroidTest "com.juul.pommel:compiler:$version" // for android tests
+    kaptTest "com.juul.pommel:compiler:$version" // for unit tests
+}
 ```
 
 # License
