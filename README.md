@@ -51,7 +51,7 @@ Will generate the equivalent of:
 
 ```java
 @Module
-@InstallIn(ApplicationComponent.class)
+@InstallIn(SingletonComponent.class)
 public abstract class SampleClass_SoloModule {
   @Provides
   @Singleton
@@ -103,7 +103,7 @@ Will generate the equivalent of:
 
 ```java
 @Module
-@InstallIn(ApplicationComponent.class)
+@InstallIn(SingletonComponent.class)
 public abstract class SampleClass_SoloModule {
   @Provides
   @Singleton
@@ -130,7 +130,7 @@ Will generate the equivalent of:
 
 ```java
 @Module
-@InstallIn(ApplicationComponent.class)
+@InstallIn(SingletonComponent.class)
 public abstract class SampleClass_SoloModule {
   @Binds
   @Singleton
@@ -156,7 +156,7 @@ Will generate the equivalent of:
 
 ```java
 @Module
-@InstallIn(ApplicationComponent.class)
+@InstallIn(SingletonComponent.class)
 public abstract class SampleClass_SoloModule {
   @Binds
   @Singleton
@@ -178,7 +178,7 @@ Will generate the equivalent of:
 
 ```java
 @Module
-@InstallIn(ApplicationComponent.class)
+@InstallIn(SingletonComponent.class)
 public abstract class name_SoloModule {
   @Provides
   @Singleton
@@ -206,7 +206,7 @@ Will generate the equivalent of:
 
 ```java
 @Module
-@InstallIn(ApplicationComponent.class)
+@InstallIn(SingletonComponent.class)
 public abstract class name_SoloModule {
   @Provides
   @Singleton
@@ -235,7 +235,7 @@ Will generate the equivalent of:
 
 ```java
 @Module
-@InstallIn(ApplicationComponent.class)
+@InstallIn(SingletonComponent.class)
 public abstract class name_SoloModule {
   @Provides
   @Singleton
@@ -287,7 +287,7 @@ constructor annotated with `@Inject`. All parameters passed into the constructor
 Pommel expects all functions annotated with `@SoloModule` to be `static` due to the fact the generated module needs to call the annotated function.
 As a result Pommel currently only supports top level functions and functions in a top level `object` that are annotated with `@JvmStatic`. `static` functions within a `companion object` are currently not supported.
 
-Pommel will install your dependency into the correct component given the scope your dependency was annotated with. If you do not provide a scope to the dependency Pommel will by default install into the ApplicationComponent.
+Pommel will install your dependency into the correct component given the scope your dependency was annotated with. If you do not provide a scope to the dependency Pommel will by default install into the SingletonComponent.
 If you annotate your dependency with a custom scope you will get a compiler error as Pommel does currently not support being installed into a custom component.
 You can get around this current limitation by setting the `install` parameter to false and pommel will skip generating the `InstallIn` annotation on your module.
 The downside is you now have to manually include the generated module into your dagger graph rather the module being auto installed in for you.

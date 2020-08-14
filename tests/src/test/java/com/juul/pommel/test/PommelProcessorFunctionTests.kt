@@ -41,13 +41,13 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          import dagger.Module;
          import dagger.Provides;
          import dagger.hilt.InstallIn;
-         import dagger.hilt.android.components.ApplicationComponent;
+         import dagger.hilt.components.SingletonComponent;
          import java.lang.String;
          import javax.annotation.Generated;
          
          $GENERATED_ANNOTATION
          @Module
-         @InstallIn(ApplicationComponent.class)
+         @InstallIn(SingletonComponent.class)
          public abstract class baseUrl_SoloModule {
            @Provides
            public static String provides_test_SourceKt_baseUrl() {
@@ -139,14 +139,14 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          import dagger.Module;
          import dagger.Provides;
          import dagger.hilt.InstallIn;
-         import dagger.hilt.android.components.ApplicationComponent;
+         import dagger.hilt.components.SingletonComponent;
          import java.lang.String;
          import javax.annotation.Generated;
          import javax.inject.Singleton;
          
          $GENERATED_ANNOTATION
          @Module
-         @InstallIn(ApplicationComponent.class)
+         @InstallIn(SingletonComponent.class)
          public abstract class baseUrl_SoloModule {
            @Provides
            @Singleton
@@ -531,14 +531,14 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          import dagger.Module;
          import dagger.Provides;
          import dagger.hilt.InstallIn;
-         import dagger.hilt.android.components.ApplicationComponent;
+         import dagger.hilt.components.SingletonComponent;
          import java.lang.String;
          import javax.annotation.Generated;
          import javax.inject.Named;
          
          $GENERATED_ANNOTATION
          @Module
-         @InstallIn(ApplicationComponent.class)
+         @InstallIn(SingletonComponent.class)
          public abstract class baseUrl_SoloModule {
            @Provides
            public static String provides_test_SourceKt_baseUrl(int a, @Named("b") byte b) {
@@ -636,14 +636,14 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          import dagger.Module;
          import dagger.Provides;
          import dagger.hilt.InstallIn;
-         import dagger.hilt.android.components.ApplicationComponent;
+         import dagger.hilt.components.SingletonComponent;
          import java.lang.String;
          import javax.annotation.Generated;
          import javax.inject.Named;
          
          $GENERATED_ANNOTATION
          @Module
-         @InstallIn(ApplicationComponent.class)
+         @InstallIn(SingletonComponent.class)
          public abstract class baseUrl_SoloModule {
            @Provides
            public static String provides_test_Sample_baseUrl(int a, @Named("b") byte b) {
@@ -688,14 +688,14 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          import dagger.Module;
          import dagger.Provides;
          import dagger.hilt.InstallIn;
-         import dagger.hilt.android.components.ApplicationComponent;
+         import dagger.hilt.components.SingletonComponent;
          import java.lang.String;
          import javax.annotation.Generated;
          import javax.inject.Named;
          
          $GENERATED_ANNOTATION
          @Module
-         @InstallIn(ApplicationComponent.class)
+         @InstallIn(SingletonComponent.class)
          public abstract class baseUrl_SoloModule {
            @Provides
            public static String provides_test_HiltFunctions_baseUrl(int a, @Named("b") byte b) {
@@ -739,12 +739,12 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          import dagger.Module;
          import dagger.Provides;
          import dagger.hilt.InstallIn;
-         import dagger.hilt.android.components.ApplicationComponent;
+         import dagger.hilt.components.SingletonComponent;
          import javax.annotation.Generated;
          
          $GENERATED_ANNOTATION
          @Module
-         @InstallIn(ApplicationComponent.class)
+         @InstallIn(SingletonComponent.class)
          public abstract class sampleClass_SoloModule {
            @Provides
            public static TestInterface provides_test_SourceKt_sampleClass() {
@@ -791,13 +791,13 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          import dagger.Module;
          import dagger.Provides;
          import dagger.hilt.InstallIn;
-         import dagger.hilt.android.components.ApplicationComponent;
+         import dagger.hilt.components.SingletonComponent;
          import javax.annotation.Generated;
          import javax.inject.Named;
          
          $GENERATED_ANNOTATION
          @Module
-         @InstallIn(ApplicationComponent.class)
+         @InstallIn(SingletonComponent.class)
          public abstract class sampleClass_SoloModule {
            @Provides
            @Named("sample")
