@@ -56,7 +56,7 @@ internal fun Element.toSoloModuleParams(): SoloModuleParams {
 
     val component = if (scope != null) {
         when (scope.type.toString()) {
-            SINGLETON_SCOPED -> applicationComponent
+            SINGLETON_SCOPED -> singletonComponent
             ACTIVITY_RETAINED_SCOPED -> activityRetainedComponent
             ACTIVITY_SCOPED -> activityComponent
             FRAGMENT_SCOPED -> fragmentComponent
@@ -65,7 +65,7 @@ internal fun Element.toSoloModuleParams(): SoloModuleParams {
             else -> null // custom scope
         }
     } else {
-        applicationComponent
+        singletonComponent
     }
 
     return SoloModuleParams(

@@ -2,7 +2,7 @@ package com.juul.pommel.compiler
 
 import com.squareup.javapoet.ClassName
 
-internal val applicationComponent: ClassName = ClassName.get("dagger.hilt.android.components", "ApplicationComponent")
+internal val singletonComponent: ClassName = ClassName.get("dagger.hilt.components", "SingletonComponent")
 internal val activityComponent: ClassName = ClassName.get("dagger.hilt.android.components", "ActivityComponent")
 internal val activityRetainedComponent: ClassName = ClassName.get("dagger.hilt.android.components", "ActivityRetainedComponent")
 internal val fragmentComponent: ClassName = ClassName.get("dagger.hilt.android.components", "FragmentComponent")
