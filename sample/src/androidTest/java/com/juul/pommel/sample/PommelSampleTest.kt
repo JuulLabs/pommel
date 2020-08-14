@@ -19,7 +19,8 @@ import javax.inject.Named
 @UninstallModules(
     value = [
         EnglishWelcomeProvider_SoloModule::class,
-        EnglishNameProvider_SoloModule::class
+        EnglishNameProvider_SoloModule::class,
+        subGreeting_SoloModule::class
     ]
 )
 class PommelSampleTest {
@@ -41,9 +42,17 @@ class PommelSampleTest {
     @JvmField
     val spanishWelcomeProvider: WelcomeProvider = SpanishWelcomeProvider()
 
+    @BindValue
+    @JvmField
+    @field:Named("subGreeting")
+    val subGreeting: String = "Buenos dias!"
+
     @Test
     fun text_is_displayed() {
         Espresso.onView(ViewMatchers.withText("Hola, Pomo!"))
+            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+
+        Espresso.onView(ViewMatchers.withText("Buenos dias!"))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 }

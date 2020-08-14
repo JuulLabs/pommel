@@ -36,6 +36,8 @@ boilerplate since dependencies using constructor injection do not need to be dec
 
 # Usage
 
+## Class
+
 ```kotlin
 @SoloModule
 @Singleton
@@ -101,6 +103,7 @@ Will generate the equivalent of:
 
 ```java
 @Module
+@InstallIn(ApplicationComponent.class)
 public abstract class SampleClass_SoloModule {
   @Provides
   @Singleton
@@ -127,6 +130,7 @@ Will generate the equivalent of:
 
 ```java
 @Module
+@InstallIn(ApplicationComponent.class)
 public abstract class SampleClass_SoloModule {
   @Binds
   @Singleton
@@ -152,13 +156,96 @@ Will generate the equivalent of:
 
 ```java
 @Module
-public class SampleClass_SoloModule {
+@InstallIn(ApplicationComponent.class)
+public abstract class SampleClass_SoloModule {
   @Binds
   @Singleton
   @Named("sample")
   public abstract MyInterface provides_SampleClass(SampleClass sampleClass);
 }
 ```
+
+## Functions
+
+```kotlin
+@Singleton
+@SoloModule
+@Named("name")
+fun name(): String = "Pommel"
+```
+
+Will generate the equivalent of:
+
+```java
+@Module
+@InstallIn(ApplicationComponent.class)
+public abstract class name_SoloModule {
+  @Provides
+  @Singleton
+  @Named("name")
+  public static String provides_FileName_name() {
+      return FileName.name(); 
+  }
+}
+```
+
+Where `FileName` is the name of the file where the function is in.
+
+You can use `@file:JvmName` to change the name of the file.
+
+```kotlin
+@file:JvmName("PommelFunctions")
+
+@Singleton
+@SoloModule
+@Named("name")
+fun name(): String = "Pommel"
+```
+
+Will generate the equivalent of:
+
+```java
+@Module
+@InstallIn(ApplicationComponent.class)
+public abstract class name_SoloModule {
+  @Provides
+  @Singleton
+  @Named("name")
+  public static String provides_PommelFunctions_name() {
+      return PommelFunctions.name(); 
+  }
+}
+```
+
+You can also use a top level `object` to hold your pommel functions.
+
+```kotlin
+
+object Module {
+
+    @Singleton
+    @SoloModule
+    @JvmStatic
+    @Named("name")
+    fun name(): String = "Pommel"
+}
+```
+
+Will generate the equivalent of:
+
+```java
+@Module
+@InstallIn(ApplicationComponent.class)
+public abstract class name_SoloModule {
+  @Provides
+  @Singleton
+  @Named("name")
+  public static String provides_Module_name() {
+      return Module.name(); 
+  }
+}
+```
+
 
 # Testing
 
@@ -194,8 +281,16 @@ Reference the [Dagger-Hilt testing package](https://dagger.dev/hilt/testing) for
 
 # Limitations
 
-Pommel currently only supports being annotated on a `class`, as a result it assumes that the `class` has at least one constructor that is annotated with `@Inject` and
-that all parameters passed into the constructor are also on the Dagger graph.
+Pommel expects `class`es annotated with `@SoloModule` to have a constructor that is is annotated with `@Inject`. Multiple constructors annotated with `@Inject` is not supported as Dagger itself only supports a single
+constructor annotated with `@Inject`. All parameters passed into the constructor must also be on the Dagger graph, as this is another expectation of Dagger constructor injection
+
+Pommel expects all functions annotated with `@SoloModule` to be `static` due to the fact the generated module needs to call the annotated function.
+As a result Pommel currently only supports top level functions and functions in a top level `object` that are annotated with `@JvmStatic`. `static` functions within a `companion object` are currently not supported.
+
+Pommel will install your dependency into the correct component given the scope your dependency was annotated with. If you do not provide a scope to the dependency Pommel will by default install into the ApplicationComponent.
+If you annotate your dependency with a custom scope you will get a compiler error as Pommel does currently not support being installed into a custom component.
+You can get around this current limitation by setting the `install` parameter to false and pommel will skip generating the `InstallIn` annotation on your module.
+The downside is you now have to manually include the generated module into your dagger graph rather the module being auto installed in for you.
 
 # Download
 

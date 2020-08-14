@@ -31,7 +31,8 @@ import javax.inject.Named
 @UninstallModules(
     value = [
         EnglishWelcomeProvider_SoloModule::class,
-        EnglishNameProvider_SoloModule::class
+        EnglishNameProvider_SoloModule::class,
+        subGreeting_SoloModule::class
     ]
 )
 class PommelSampleUnitTest {
@@ -49,10 +50,16 @@ class PommelSampleUnitTest {
     @field:Named("NameProvider")
     val frenchNameProvider: NameProvider = FrenchNameProvider()
 
+    @BindValue
+    @JvmField
+    @field:Named("subGreeting")
+    val subGreeting: String = "Bonjour!"
+
     @Test
     fun text_is_displayed() {
         val scenario = launchActivity<MainActivity>()
         onView(withId(R.id.hello)).check(matches(withText("Bonjour, Pommeau!")))
+        onView(withId(R.id.sub_greeting)).check(matches(withText("Bonjour!")))
         scenario.close()
     }
 }

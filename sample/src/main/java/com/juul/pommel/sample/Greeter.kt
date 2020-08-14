@@ -7,10 +7,15 @@ import javax.inject.Named
 @SoloModule
 class Greeter @Inject constructor(
     private val welcomeProvider: WelcomeProvider,
-    @Named("NameProvider") private val nameProvider: NameProvider
+    @Named("NameProvider") private val nameProvider: NameProvider,
+    @Named("subGreeting") private val subGreeting: String
 ) {
 
     fun greet(): String {
         return "${welcomeProvider.greeting()}, ${nameProvider.name()}!"
+    }
+
+    fun subGreeting(): String {
+        return subGreeting
     }
 }
