@@ -600,11 +600,11 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.COMPILATION_ERROR)
-        assertThat(result.messages).contains("error: Functions marked with @SoloModule must be static")
+        assertThat(result.messages).contains("error: Functions marked with @SoloModule must be top level or enclosed in an object or companion class")
     }
 
     @Test
-    fun `function in top level companion object`() {
+    fun `function in top level object with JvmStatic`() {
         val result = compile(
             SourceFile.kotlin(
                 "source.kt",
@@ -647,9 +647,322 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          public abstract class baseUrl_SoloModule {
            @Provides
            public static String provides_test_Sample_baseUrl(int a, @Named("b") byte b) {
-             return Sample.baseUrl(
+             return Sample.INSTANCE.baseUrl(
                  a,
                  b);
+           }
+         }"""
+        )
+    }
+
+    @Test
+    fun `function in top level object no JvmStatic`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject
+          import javax.inject.Named
+          import javax.inject.Scope
+
+          object Sample {
+              @SoloModule
+              @JvmStatic
+              fun baseUrl(a: Int, @Named("b") b: Byte): String {
+                  return "baseUrl" + a.toString() + b.toString()
+              }
+          }
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+
+         import dagger.Module;
+         import dagger.Provides;
+         import dagger.hilt.InstallIn;
+         import dagger.hilt.components.SingletonComponent;
+         import java.lang.String;
+         import javax.annotation.Generated;
+         import javax.inject.Named;
+         
+         $GENERATED_ANNOTATION
+         @Module
+         @InstallIn(SingletonComponent.class)
+         public abstract class baseUrl_SoloModule {
+           @Provides
+           public static String provides_test_Sample_baseUrl(int a, @Named("b") byte b) {
+             return Sample.INSTANCE.baseUrl(
+                 a,
+                 b);
+           }
+         }"""
+        )
+    }
+
+    @Test
+    fun `function in a companion object `() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject
+          import javax.inject.Named
+          import javax.inject.Scope
+
+          class Sample { 
+              companion object {
+                  @SoloModule
+                  fun baseUrl(a: Int, @Named("b") b: Byte): String {
+                      return "baseUrl" + a.toString() + b.toString()
+                  } 
+              }
+          }
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+
+         import dagger.Module;
+         import dagger.Provides;
+         import dagger.hilt.InstallIn;
+         import dagger.hilt.components.SingletonComponent;
+         import java.lang.String;
+         import javax.annotation.Generated;
+         import javax.inject.Named;
+         
+         $GENERATED_ANNOTATION
+         @Module
+         @InstallIn(SingletonComponent.class)
+         public abstract class baseUrl_SoloModule {
+           @Provides
+           public static String provides_test_Sample${'$'}Companion_baseUrl(int a, @Named("b") byte b) {
+             return Sample.Companion.baseUrl(
+                 a,
+                 b);
+           }
+         }"""
+        )
+    }
+
+    @Test
+    fun `function in a named companion object `() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject
+          import javax.inject.Named
+          import javax.inject.Scope
+
+          class Sample { 
+              companion object Module{
+                  @SoloModule
+                  fun baseUrl(a: Int, @Named("b") b: Byte): String {
+                      return "baseUrl" + a.toString() + b.toString()
+                  } 
+              }
+          }
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+
+         import dagger.Module;
+         import dagger.Provides;
+         import dagger.hilt.InstallIn;
+         import dagger.hilt.components.SingletonComponent;
+         import java.lang.String;
+         import javax.annotation.Generated;
+         import javax.inject.Named;
+         
+         $GENERATED_ANNOTATION
+         @Module
+         @InstallIn(SingletonComponent.class)
+         public abstract class baseUrl_SoloModule {
+           @Provides
+           public static String provides_test_Sample${'$'}Module_baseUrl(int a, @Named("b") byte b) {
+             return Sample.Module.baseUrl(
+                 a,
+                 b);
+           }
+         }"""
+        )
+    }
+
+    @Test
+    fun `function in a nested class companion object `() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject
+          import javax.inject.Named
+          import javax.inject.Scope
+
+          class Sample { 
+              class Module{
+                  companion object Nested {
+                      @SoloModule
+                      fun baseUrl(a: Int, @Named("b") b: Byte): String {
+                          return "baseUrl" + a.toString() + b.toString()
+                      }
+                  }
+              }
+          }
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+
+         import dagger.Module;
+         import dagger.Provides;
+         import dagger.hilt.InstallIn;
+         import dagger.hilt.components.SingletonComponent;
+         import java.lang.String;
+         import javax.annotation.Generated;
+         import javax.inject.Named;
+         
+         $GENERATED_ANNOTATION
+         @Module
+         @InstallIn(SingletonComponent.class)
+         public abstract class baseUrl_SoloModule {
+           @Provides
+           public static String provides_test_Sample${'$'}Module${'$'}Nested_baseUrl(int a, @Named("b") byte b) {
+             return Sample.Module.Nested.baseUrl(
+                 a,
+                 b);
+           }
+         }"""
+        )
+    }
+
+    @Test
+    fun `function in a nested object class`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject
+          import javax.inject.Named
+          import javax.inject.Scope
+
+          object Sample { 
+              object A {
+                  object B {
+                      @SoloModule
+                      fun baseUrl(a: Int, @Named("b") b: Byte): String {
+                          return "baseUrl" + a.toString() + b.toString()
+                      }
+                  }
+              }
+          }
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+
+         import dagger.Module;
+         import dagger.Provides;
+         import dagger.hilt.InstallIn;
+         import dagger.hilt.components.SingletonComponent;
+         import java.lang.String;
+         import javax.annotation.Generated;
+         import javax.inject.Named;
+         
+         $GENERATED_ANNOTATION
+         @Module
+         @InstallIn(SingletonComponent.class)
+         public abstract class baseUrl_SoloModule {
+           @Provides
+           public static String provides_test_Sample${'$'}A${'$'}B_baseUrl(int a, @Named("b") byte b) {
+             return Sample.A.B.INSTANCE.baseUrl(
+                 a,
+                 b);
+           }
+         }"""
+        )
+    }
+
+    @Test
+    fun `getter function annotated`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+
+          import com.juul.pommel.annotations.SoloModule
+          import javax.inject.Inject
+          import javax.inject.Named
+          import javax.inject.Scope
+
+          @get:SoloModule
+          val baseUrl = "baseUrl"
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("getBaseUrl_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+
+         import dagger.Module;
+         import dagger.Provides;
+         import dagger.hilt.InstallIn;
+         import dagger.hilt.components.SingletonComponent;
+         import java.lang.String;
+         import javax.annotation.Generated;
+         
+         $GENERATED_ANNOTATION
+         @Module
+         @InstallIn(SingletonComponent.class)
+         public abstract class getBaseUrl_SoloModule {
+           @Provides
+           public static String provides_test_SourceKt_getBaseUrl() {
+             return SourceKt.getBaseUrl(
+                 );
            }
          }"""
         )

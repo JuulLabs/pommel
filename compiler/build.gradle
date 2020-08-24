@@ -12,6 +12,7 @@ dependencies {
     implementation deps.javaPoet
 
     implementation deps.kotlin
+    implementation "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.1.0"
 
     compileOnly deps.autoService
     kapt deps.autoService
