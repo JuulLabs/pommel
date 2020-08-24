@@ -35,14 +35,9 @@ class KotlinMetadata private constructor(private val flags: Flags) {
 private class MetadataVisitor : KmClassVisitor() {
 
     var classFlags: Int = 0
-    var companionObjectName: String? = null
 
     override fun visit(flags: Flags, name: ClassName) {
         classFlags = flags
-    }
-
-    override fun visitCompanionObject(name: String) {
-        this.companionObjectName = name
     }
 }
 
