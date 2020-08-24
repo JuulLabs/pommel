@@ -670,7 +670,6 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
 
           object Sample {
               @SoloModule
-              @JvmStatic
               fun baseUrl(a: Int, @Named("b") b: Byte): String {
                   return "baseUrl" + a.toString() + b.toString()
               }
