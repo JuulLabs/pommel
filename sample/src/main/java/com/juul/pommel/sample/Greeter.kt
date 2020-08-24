@@ -8,7 +8,8 @@ import javax.inject.Named
 class Greeter @Inject constructor(
     private val welcomeProvider: WelcomeProvider,
     @Named("NameProvider") private val nameProvider: NameProvider,
-    @Named("subGreeting") private val subGreeting: String
+    @Named("subGreeting") private val subGreeting: String,
+    @Named("QuestionProvider") private val question: Question
 ) {
 
     fun greet(): String {
@@ -17,5 +18,9 @@ class Greeter @Inject constructor(
 
     fun subGreeting(): String {
         return subGreeting
+    }
+
+    fun question(): String {
+        return question.question()
     }
 }
