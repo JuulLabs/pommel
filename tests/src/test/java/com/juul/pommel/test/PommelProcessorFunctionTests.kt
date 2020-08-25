@@ -33,7 +33,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        val file = result.getGeneratedFile("SourceKt_baseUrl_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -48,7 +48,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(SingletonComponent.class)
-         public abstract class baseUrl_SoloModule {
+         public abstract class SourceKt_baseUrl_SoloModule {
            @Provides
            public static String provides_test_SourceKt_baseUrl() {
              return SourceKt.baseUrl(
@@ -83,7 +83,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        val file = result.getGeneratedFile("SourceKt_baseUrl_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -95,7 +95,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          
          $GENERATED_ANNOTATION
          @Module
-         public abstract class baseUrl_SoloModule {
+         public abstract class SourceKt_baseUrl_SoloModule {
            @Provides
            public static String provides_test_SourceKt_baseUrl() {
              return SourceKt.baseUrl(
@@ -131,7 +131,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        val file = result.getGeneratedFile("SourceKt_baseUrl_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -147,7 +147,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(SingletonComponent.class)
-         public abstract class baseUrl_SoloModule {
+         public abstract class SourceKt_baseUrl_SoloModule {
            @Provides
            @Singleton
            public static String provides_test_SourceKt_baseUrl() {
@@ -183,7 +183,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        val file = result.getGeneratedFile("SourceKt_baseUrl_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -199,7 +199,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(ActivityRetainedComponent.class)
-         public abstract class baseUrl_SoloModule {
+         public abstract class SourceKt_baseUrl_SoloModule {
            @Provides
            @ActivityRetainedScoped
            public static String provides_test_SourceKt_baseUrl() {
@@ -235,7 +235,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        val file = result.getGeneratedFile("SourceKt_baseUrl_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -251,7 +251,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(ActivityComponent.class)
-         public abstract class baseUrl_SoloModule {
+         public abstract class SourceKt_baseUrl_SoloModule {
            @Provides
            @ActivityScoped
            public static String provides_test_SourceKt_baseUrl() {
@@ -287,7 +287,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        val file = result.getGeneratedFile("SourceKt_baseUrl_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -303,7 +303,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(FragmentComponent.class)
-         public abstract class baseUrl_SoloModule {
+         public abstract class SourceKt_baseUrl_SoloModule {
            @Provides
            @FragmentScoped
            public static String provides_test_SourceKt_baseUrl() {
@@ -339,7 +339,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        val file = result.getGeneratedFile("SourceKt_baseUrl_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -355,7 +355,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(ServiceComponent.class)
-         public abstract class baseUrl_SoloModule {
+         public abstract class SourceKt_baseUrl_SoloModule {
            @Provides
            @ServiceScoped
            public static String provides_test_SourceKt_baseUrl() {
@@ -391,7 +391,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        val file = result.getGeneratedFile("SourceKt_baseUrl_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -407,7 +407,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(ViewComponent.class)
-         public abstract class baseUrl_SoloModule {
+         public abstract class SourceKt_baseUrl_SoloModule {
            @Provides
            @ViewScoped
            public static String provides_test_SourceKt_baseUrl() {
@@ -477,7 +477,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        val file = result.getGeneratedFile("SourceKt_baseUrl_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -489,7 +489,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          
          $GENERATED_ANNOTATION
          @Module
-         public abstract class baseUrl_SoloModule {
+         public abstract class SourceKt_baseUrl_SoloModule {
            @Provides
            @CustomScope
            public static String provides_test_SourceKt_baseUrl() {
@@ -523,7 +523,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        val file = result.getGeneratedFile("SourceKt_baseUrl_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -539,7 +539,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(SingletonComponent.class)
-         public abstract class baseUrl_SoloModule {
+         public abstract class SourceKt_baseUrl_SoloModule {
            @Provides
            public static String provides_test_SourceKt_baseUrl(int a, @Named("b") byte b) {
              return SourceKt.baseUrl(
@@ -628,7 +628,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        val file = result.getGeneratedFile("Sample_baseUrl_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -644,7 +644,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(SingletonComponent.class)
-         public abstract class baseUrl_SoloModule {
+         public abstract class Sample_baseUrl_SoloModule {
            @Provides
            public static String provides_test_Sample_baseUrl(int a, @Named("b") byte b) {
              return Sample.INSTANCE.baseUrl(
@@ -679,7 +679,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        val file = result.getGeneratedFile("Sample_baseUrl_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -695,7 +695,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(SingletonComponent.class)
-         public abstract class baseUrl_SoloModule {
+         public abstract class Sample_baseUrl_SoloModule {
            @Provides
            public static String provides_test_Sample_baseUrl(int a, @Named("b") byte b) {
              return Sample.INSTANCE.baseUrl(
@@ -732,7 +732,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        val file = result.getGeneratedFile("Sample_Companion_baseUrl_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -748,7 +748,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(SingletonComponent.class)
-         public abstract class baseUrl_SoloModule {
+         public abstract class Sample_Companion_baseUrl_SoloModule {
            @Provides
            public static String provides_test_Sample${'$'}Companion_baseUrl(int a, @Named("b") byte b) {
              return Sample.Companion.baseUrl(
@@ -785,7 +785,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        val file = result.getGeneratedFile("Sample_Module_baseUrl_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -801,7 +801,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(SingletonComponent.class)
-         public abstract class baseUrl_SoloModule {
+         public abstract class Sample_Module_baseUrl_SoloModule {
            @Provides
            public static String provides_test_Sample${'$'}Module_baseUrl(int a, @Named("b") byte b) {
              return Sample.Module.baseUrl(
@@ -840,7 +840,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        val file = result.getGeneratedFile("Sample_Module_Nested_baseUrl_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -856,7 +856,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(SingletonComponent.class)
-         public abstract class baseUrl_SoloModule {
+         public abstract class Sample_Module_Nested_baseUrl_SoloModule {
            @Provides
            public static String provides_test_Sample${'$'}Module${'$'}Nested_baseUrl(int a, @Named("b") byte b) {
              return Sample.Module.Nested.baseUrl(
@@ -895,7 +895,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        val file = result.getGeneratedFile("Sample_A_B_baseUrl_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -911,7 +911,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(SingletonComponent.class)
-         public abstract class baseUrl_SoloModule {
+         public abstract class Sample_A_B_baseUrl_SoloModule {
            @Provides
            public static String provides_test_Sample${'$'}A${'$'}B_baseUrl(int a, @Named("b") byte b) {
              return Sample.A.B.INSTANCE.baseUrl(
@@ -942,7 +942,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("getBaseUrl_SoloModule.java")
+        val file = result.getGeneratedFile("SourceKt_getBaseUrl_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -957,7 +957,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(SingletonComponent.class)
-         public abstract class getBaseUrl_SoloModule {
+         public abstract class SourceKt_getBaseUrl_SoloModule {
            @Provides
            public static String provides_test_SourceKt_getBaseUrl() {
              return SourceKt.getBaseUrl(
@@ -992,7 +992,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("baseUrl_SoloModule.java")
+        val file = result.getGeneratedFile("HiltFunctions_baseUrl_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -1008,7 +1008,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(SingletonComponent.class)
-         public abstract class baseUrl_SoloModule {
+         public abstract class HiltFunctions_baseUrl_SoloModule {
            @Provides
            public static String provides_test_HiltFunctions_baseUrl(int a, @Named("b") byte b) {
              return HiltFunctions.baseUrl(
@@ -1043,7 +1043,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("sampleClass_SoloModule.java")
+        val file = result.getGeneratedFile("SourceKt_sampleClass_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -1057,7 +1057,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(SingletonComponent.class)
-         public abstract class sampleClass_SoloModule {
+         public abstract class SourceKt_sampleClass_SoloModule {
            @Provides
            public static TestInterface provides_test_SourceKt_sampleClass() {
              return SourceKt.sampleClass(
@@ -1095,7 +1095,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
         )
 
         assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("sampleClass_SoloModule.java")
+        val file = result.getGeneratedFile("SourceKt_sampleClass_SoloModule.java")
         assertThat(file).isEqualToJava(
             """
          package test;
@@ -1110,7 +1110,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          $GENERATED_ANNOTATION
          @Module
          @InstallIn(SingletonComponent.class)
-         public abstract class sampleClass_SoloModule {
+         public abstract class SourceKt_sampleClass_SoloModule {
            @Provides
            @Named("sample")
            public static TestInterface provides_test_SourceKt_sampleClass() {

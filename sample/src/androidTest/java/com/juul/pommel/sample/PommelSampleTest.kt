@@ -20,8 +20,8 @@ import javax.inject.Named
     value = [
         EnglishWelcomeProvider_SoloModule::class,
         EnglishNameProvider_SoloModule::class,
-        subGreeting_SoloModule::class,
-        create_SoloModule::class
+        ConfigKt_subGreeting_SoloModule::class,
+        Question_Factory_create_SoloModule::class
     ]
 )
 class PommelSampleTest {
