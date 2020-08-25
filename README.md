@@ -179,7 +179,7 @@ Will generate the equivalent of:
 ```java
 @Module
 @InstallIn(SingletonComponent.class)
-public abstract class name_SoloModule {
+public abstract class FileName_name_SoloModule {
   @Provides
   @Singleton
   @Named("name")
@@ -207,7 +207,7 @@ Will generate the equivalent of:
 ```java
 @Module
 @InstallIn(SingletonComponent.class)
-public abstract class name_SoloModule {
+public abstract class PommelFunctions_name_SoloModule {
   @Provides
   @Singleton
   @Named("name")
@@ -234,7 +234,7 @@ Will generate the equivalent of:
 ```java
 @Module
 @InstallIn(SingletonComponent.class)
-public abstract class name_SoloModule {
+public abstract class Module_name_SoloModule {
   @Provides
   @Singleton
   @Named("name")
@@ -260,7 +260,7 @@ Will generate the equivalent of:
 ```java
 @Module
 @InstallIn(SingletonComponent.class)
-public abstract class create_SoloModule {
+public abstract class MyClass_Factory_create_SoloModule {
   @Provides
   @Singleton
   @Named("name")
@@ -284,11 +284,11 @@ Will generate the equivalent of:
 ```java
 @Module
 @InstallIn(SingletonComponent.class)
-public abstract class getBaseUrl_SoloModule {
+public abstract class FileName_getBaseUrl_SoloModule {
     @Provides
     @Named("baseUrl")
     public static String provides_getBaseUrl() {
-        return getBaseUrl();
+        return FileName.getBaseUrl();
     }
 }
 ```
