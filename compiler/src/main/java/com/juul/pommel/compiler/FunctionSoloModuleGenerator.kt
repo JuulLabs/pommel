@@ -19,27 +19,42 @@ internal class FunctionSoloModuleGenerator : SoloModuleGenerator {
         return element.kind == ElementKind.METHOD
     }
 
-    // object classes and companion objects can be deeply nested
-    // this is way to get the full chained function name
-    // e.g. Sample.Module.Pommel.baseUrl()
+    /**
+     *  object and companion classes can be deeply nested.
+     *  This function will retrieve the fully chained name.
+     *
+     *  e.g.
+     *
+     *  class Sample {
+     *      class Module {
+     *          companion object Pommel {
+     *              fun baseUrl(): String = "baseUrl"
+     *          }
+     *      }
+     *  }
+     *
+     *  will generate the following function call:
+     *
+     *  Sample.Module.Pommel.baseUrl()
+     */
     private fun Element.fullFunctionName(): String {
         var enclosingElement = this
         var name = ""
         var instanceAdded = false
-        // stop once you reach the package as they are no more enclosing beyond package
-        // we only need to add instance for the last nested object class
+        // stop once you reach the package as they are no more enclosing elements beyond package
+        // we only need to add 'INSTANCE' for the last nested object class
         // we can chain the other object classes
         // e.g. ObjectA.ObjectB.ObjectC.INSTANCE.baseUrl()
         while (enclosingElement.kind != ElementKind.PACKAGE) {
             val metadata = if (enclosingElement.enclosingElement.kind != ElementKind.PACKAGE && !instanceAdded) {
-                // Kotlin Metadata annotation does not exist on a package
-                // simply ignore and move on
                 KotlinMetadataFactory.create(enclosingElement, null)
             } else {
+                // Kotlin Metadata annotation does not exist on a package
+                // simply ignore and move on
                 null
             }
-            // do not add dot if this is the first iteration of the loop
-            // you will end up with an extra dot at the of string
+            // do not add chained dot if this is the first iteration of the loop
+            // you will end up with an extra chained dot at the of string
             val dot = if (name.isNotBlank()) "." else ""
             val objectClass = if (metadata?.isObjectClass() == true) {
                 instanceAdded = true
