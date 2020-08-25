@@ -5,7 +5,7 @@ import com.juul.pommel.compiler.hasAnnotation
 import javax.annotation.processing.Messager
 import javax.lang.model.element.Element
 
-object KotlinMetadataFactory {
+internal object KotlinMetadataFactory {
 
     private val metadataCache = mutableMapOf<Element, KotlinMetadata>()
 

@@ -10,7 +10,7 @@ import kotlinx.metadata.jvm.KotlinClassMetadata
 import javax.annotation.processing.Messager
 import javax.lang.model.element.Element
 
-class KotlinMetadata private constructor(private val flags: Flags) {
+internal class KotlinMetadata private constructor(private val flags: Flags) {
 
     fun isObjectClass(): Boolean {
         return Flag.Class.IS_OBJECT.invoke(flags)

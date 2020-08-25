@@ -33,7 +33,7 @@ internal class FunctionSoloModuleGenerator : SoloModuleGenerator {
      *      }
      *  }
      *
-     *  will generate the following function call:
+     *  will return the following function call:
      *
      *  Sample.Module.Pommel.baseUrl()
      */
@@ -54,7 +54,7 @@ internal class FunctionSoloModuleGenerator : SoloModuleGenerator {
                 null
             }
             // do not add chained dot if this is the first iteration of the loop
-            // you will end up with an extra chained dot at the of string
+            // you will end up with an extra chained dot at the end of the string
             val dot = if (name.isNotBlank()) "." else ""
             val objectClass = if (metadata?.isObjectClass() == true) {
                 instanceAdded = true
@@ -71,7 +71,7 @@ internal class FunctionSoloModuleGenerator : SoloModuleGenerator {
     override fun generate(pommelModule: PommelModule, element: Element): JavaFile {
         val funcName = (element.enclosingElement.asType().toTypeName().rawClassName().reflectionName().replace('.', '_'))
         val fullFunctionName = element.fullFunctionName()
-        val className = fullFunctionName.replace('.', '_').replace("INSTANCE_", "").capitalize()
+        val className = fullFunctionName.replace('.', '_').replace("INSTANCE_", "")
         val spec = TypeSpec.classBuilder(className + "_SoloModule")
             .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
             .addAnnotation(
