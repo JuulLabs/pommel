@@ -24,6 +24,7 @@ buildscript {
         'junit'               : 'junit:junit:4.13',
         'assertJ'             : "org.assertj:assertj-core:3.15.0",
         'kotlin'              : "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}",
+        'kotlinMetdata'       : "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.1.0",
         'kotlinCompileTesting': "com.github.tschuchortdev:kotlin-compile-testing:1.2.9",
         'kotlinTestCommon'    : "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}",
         'kotlinTestJunit'     : "org.jetbrains.kotlin:kotlin-test-junit:${versions.kotlin}",

@@ -18,5 +18,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.hello.text = greeter.greet()
         binding.subGreeting.text = greeter.subGreeting()
+        binding.question.text = greeter.question()
     }
 }

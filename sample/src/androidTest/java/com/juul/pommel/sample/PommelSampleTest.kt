@@ -20,7 +20,8 @@ import javax.inject.Named
     value = [
         EnglishWelcomeProvider_SoloModule::class,
         EnglishNameProvider_SoloModule::class,
-        subGreeting_SoloModule::class
+        ConfigKt_subGreeting_SoloModule::class,
+        Question_Factory_create_SoloModule::class
     ]
 )
 class PommelSampleTest {
@@ -47,12 +48,24 @@ class PommelSampleTest {
     @field:Named("subGreeting")
     val subGreeting: String = "Buenos dias!"
 
+    @BindValue
+    @JvmField
+    @field:Named("QuestionProvider")
+    val spanishQuestion: Question = object : Question {
+        override fun question(): String {
+            return "Como estas?"
+        }
+    }
+
     @Test
     fun text_is_displayed() {
         Espresso.onView(ViewMatchers.withText("Hola, Pomo!"))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
 
         Espresso.onView(ViewMatchers.withText("Buenos dias!"))
+            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+
+        Espresso.onView(ViewMatchers.withText("Como estas?"))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 }

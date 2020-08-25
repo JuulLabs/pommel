@@ -32,7 +32,8 @@ import javax.inject.Named
     value = [
         EnglishWelcomeProvider_SoloModule::class,
         EnglishNameProvider_SoloModule::class,
-        subGreeting_SoloModule::class
+        ConfigKt_subGreeting_SoloModule::class,
+        Question_Factory_create_SoloModule::class
     ]
 )
 class PommelSampleUnitTest {
@@ -55,11 +56,21 @@ class PommelSampleUnitTest {
     @field:Named("subGreeting")
     val subGreeting: String = "Bonjour!"
 
+    @BindValue
+    @JvmField
+    @field:Named("QuestionProvider")
+    val frenchQuestion: Question = object : Question {
+        override fun question(): String {
+            return "Comment ca va?"
+        }
+    }
+
     @Test
     fun text_is_displayed() {
         val scenario = launchActivity<MainActivity>()
         onView(withId(R.id.hello)).check(matches(withText("Bonjour, Pommeau!")))
         onView(withId(R.id.sub_greeting)).check(matches(withText("Bonjour!")))
+        onView(withId(R.id.question)).check(matches(withText("Comment ca va?")))
         scenario.close()
     }
 }

@@ -12,3 +12,7 @@ internal inline fun <reified T : Annotation> RoundEnvironment.getElementsAnnotat
 internal fun Messager.error(message: String, element: Element? = null) {
     printMessage(Diagnostic.Kind.ERROR, message, element)
 }
+
+internal fun Messager.warn(message: String, element: Element? = null) {
+    printMessage(Diagnostic.Kind.WARNING, message, element)
+}

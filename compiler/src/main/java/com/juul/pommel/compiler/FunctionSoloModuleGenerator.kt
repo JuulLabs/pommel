@@ -1,5 +1,6 @@
 package com.juul.pommel.compiler
 
+import com.juul.pommel.compiler.kotlin.KotlinMetadataFactory
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.JavaFile
@@ -18,9 +19,60 @@ internal class FunctionSoloModuleGenerator : SoloModuleGenerator {
         return element.kind == ElementKind.METHOD
     }
 
+    /**
+     *  object and companion classes can be deeply nested.
+     *  This function will retrieve the fully chained name.
+     *
+     *  e.g.
+     *
+     *  class Sample {
+     *      class Module {
+     *          companion object Pommel {
+     *              fun baseUrl(): String = "baseUrl"
+     *          }
+     *      }
+     *  }
+     *
+     *  will return the following function call:
+     *
+     *  Sample.Module.Pommel.baseUrl()
+     */
+    private fun Element.fullFunctionName(): String {
+        var enclosingElement = this
+        var name = ""
+        var instanceAdded = false
+        // stop once you reach the package as they are no more enclosing elements beyond package
+        // we only need to add 'INSTANCE' for the last nested object class
+        // we can chain the other object classes
+        // e.g. ObjectA.ObjectB.ObjectC.INSTANCE.baseUrl()
+        while (enclosingElement.kind != ElementKind.PACKAGE) {
+            val metadata = if (enclosingElement.enclosingElement.kind != ElementKind.PACKAGE && !instanceAdded) {
+                KotlinMetadataFactory.create(enclosingElement, null)
+            } else {
+                // Kotlin Metadata annotation does not exist on a package
+                // simply ignore and move on
+                null
+            }
+            // do not add chained dot if this is the first iteration of the loop
+            // you will end up with an extra chained dot at the end of the string
+            val dot = if (name.isNotBlank()) "." else ""
+            val objectClass = if (metadata?.isObjectClass() == true) {
+                instanceAdded = true
+                "INSTANCE."
+            } else {
+                ""
+            }
+            name = objectClass + enclosingElement.simpleName.toString() + dot + name
+            enclosingElement = enclosingElement.enclosingElement
+        }
+        return name
+    }
+
     override fun generate(pommelModule: PommelModule, element: Element): JavaFile {
         val funcName = (element.enclosingElement.asType().toTypeName().rawClassName().reflectionName().replace('.', '_'))
-        val spec = TypeSpec.classBuilder(element.simpleName.toString() + "_SoloModule")
+        val fullFunctionName = element.fullFunctionName()
+        val className = fullFunctionName.replace('.', '_').replace("INSTANCE_", "")
+        val spec = TypeSpec.classBuilder(className + "_SoloModule")
             .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
             .addAnnotation(
                 AnnotationSpec.builder(generated)
@@ -49,7 +101,7 @@ internal class FunctionSoloModuleGenerator : SoloModuleGenerator {
                         addParameter(param.qualifiedType, param.simpleName.toString())
                     }
                     .addStatement(
-                        "return \$L.\$L(\n\$L)", pommelModule.moduleType.simpleName, element.simpleName,
+                        "return \$L(\n\$L)", fullFunctionName,
                         pommelModule.parameters.map { parameter -> CodeBlock.of("\$N", parameter.simpleName) }.joinToCode(",\n")
                     )
                     .build()
@@ -63,13 +115,15 @@ internal class FunctionSoloModuleGenerator : SoloModuleGenerator {
         require(element is ExecutableElement)
         var valid = true
 
+        val metadata = KotlinMetadataFactory.create(element, messager)
+
         if (Modifier.PUBLIC !in element.modifiers) {
             messager.error("Functions marked with @SoloModule must be public", element)
             valid = false
         }
 
-        if (Modifier.STATIC !in element.modifiers) {
-            messager.error("Functions marked with @SoloModule must be static", element)
+        if (Modifier.STATIC !in element.modifiers && !metadata.isCompanionObjectClass() && !metadata.isObjectClass()) {
+            messager.error("Functions marked with @SoloModule must be top level or enclosed in an object or companion class", element)
             valid = false
         }
 

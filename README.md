@@ -179,7 +179,7 @@ Will generate the equivalent of:
 ```java
 @Module
 @InstallIn(SingletonComponent.class)
-public abstract class name_SoloModule {
+public abstract class FileName_name_SoloModule {
   @Provides
   @Singleton
   @Named("name")
@@ -207,7 +207,7 @@ Will generate the equivalent of:
 ```java
 @Module
 @InstallIn(SingletonComponent.class)
-public abstract class name_SoloModule {
+public abstract class PommelFunctions_name_SoloModule {
   @Provides
   @Singleton
   @Named("name")
@@ -222,10 +222,8 @@ You can also use a top level `object` to hold your pommel functions.
 ```kotlin
 
 object Module {
-
     @Singleton
     @SoloModule
-    @JvmStatic
     @Named("name")
     fun name(): String = "Pommel"
 }
@@ -236,16 +234,64 @@ Will generate the equivalent of:
 ```java
 @Module
 @InstallIn(SingletonComponent.class)
-public abstract class name_SoloModule {
+public abstract class Module_name_SoloModule {
   @Provides
   @Singleton
   @Named("name")
   public static String provides_Module_name() {
-      return Module.name(); 
+      return Module.INSTANCE.name(); 
   }
 }
 ```
 
+You can enclose your functions in a `companion` object
+
+```kotlin
+class MyClass private constructor () {
+    companion object Factory {
+        @SoloModule
+        fun create() = MyClass()
+    }
+}
+```
+
+Will generate the equivalent of:
+
+```java
+@Module
+@InstallIn(SingletonComponent.class)
+public abstract class MyClass_Factory_create_SoloModule {
+  @Provides
+  @Singleton
+  @Named("name")
+  public static MyClass provides_MyClass$Factory_create() {
+      return MyClass.Factory.create(); 
+  }
+}
+```
+
+You annotate the getter of a backing field:
+
+```kotlin
+@get:SoloModule
+@Named("baseUrl")
+val baseUrl = "baseUrl"
+```
+
+Will generate the equivalent of:
+
+
+```java
+@Module
+@InstallIn(SingletonComponent.class)
+public abstract class FileName_getBaseUrl_SoloModule {
+    @Provides
+    @Named("baseUrl")
+    public static String provides_getBaseUrl() {
+        return FileName.getBaseUrl();
+    }
+}
+```
 
 # Testing
 
@@ -285,7 +331,7 @@ Pommel expects `class`es annotated with `@SoloModule` to have a constructor that
 constructor annotated with `@Inject`. All parameters passed into the constructor must also be on the Dagger graph, as this is another expectation of Dagger constructor injection
 
 Pommel expects all functions annotated with `@SoloModule` to be `static` due to the fact the generated module needs to call the annotated function.
-As a result Pommel currently only supports top level functions and functions in a top level `object` that are annotated with `@JvmStatic`. `static` functions within a `companion object` are currently not supported.
+As a result Pommel only supports top level functions and functions that are enclosed in a `object` or `companion` class
 
 Pommel will install your dependency into the correct component given the scope your dependency was annotated with. If you do not provide a scope to the dependency Pommel will by default install into the SingletonComponent.
 If you annotate your dependency with a custom scope you will get a compiler error as Pommel does currently not support being installed into a custom component.
