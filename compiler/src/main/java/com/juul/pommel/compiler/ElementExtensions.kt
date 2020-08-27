@@ -31,7 +31,7 @@ private fun VariableElement.qualifier(): AnnotationSpec? {
 
 internal fun Element.toSoloModuleParams(): SoloModuleParams {
     val soloModule = checkNotNull(getAnnotation(SoloModule::class.java))
-    val install = soloModule.install
+    val component = checkNotNull(getTypeMirror { soloModule.installIn }).toTypeName()
     val typeName = checkNotNull(getTypeMirror { soloModule.bindingClass }).toTypeName()
     // Calling toTypeName() on a function will throw an IllegalArgumentException since a developer can
     // directly specify the return type of a function directly, you can ignore this annotation parameter
@@ -54,25 +54,10 @@ internal fun Element.toSoloModuleParams(): SoloModuleParams {
         AnnotationSpec.get(it)
     }
 
-    val component = if (scope != null) {
-        when (scope.type.toString()) {
-            SINGLETON_SCOPED -> singletonComponent
-            ACTIVITY_RETAINED_SCOPED -> activityRetainedComponent
-            ACTIVITY_SCOPED -> activityComponent
-            FRAGMENT_SCOPED -> fragmentComponent
-            SERVICE_SCOPED -> serviceComponent
-            VIEW_SCOPED -> viewComponent
-            else -> null // custom scope
-        }
-    } else {
-        singletonComponent
-    }
-
     return SoloModuleParams(
         component = component,
         scope = scope,
         qualifier = qualifier,
-        install = install,
         bindingType = bindingType
     )
 }
