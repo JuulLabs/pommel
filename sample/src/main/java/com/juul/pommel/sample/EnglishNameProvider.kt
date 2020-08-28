@@ -5,7 +5,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 import javax.inject.Named
 
-@SoloModule(NameProvider::class, SingletonComponent::class)
+@SoloModule(installIn = SingletonComponent::class, bindingClass = NameProvider::class)
 @Named("NameProvider")
 class EnglishNameProvider @Inject constructor() : NameProvider {
 
