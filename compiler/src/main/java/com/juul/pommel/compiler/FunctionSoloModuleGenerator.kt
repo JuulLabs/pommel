@@ -70,11 +70,7 @@ internal class FunctionSoloModuleGenerator : SoloModuleGenerator {
     }
 
     override fun generate(pommelModule: PommelModule, element: Element): JavaFile {
-        val funcName =
-            (
-                element.enclosingElement.asType().toTypeName().rawClassName().reflectionName()
-                    .replace('.', '_')
-                )
+        val funcName = (element.enclosingElement.asType().toTypeName().rawClassName().reflectionName().replace('.', '_'))
         val fullFunctionName = element.fullFunctionName()
         val className = fullFunctionName.replace('.', '_').replace("INSTANCE_", "")
         val spec = TypeSpec.classBuilder(className + "_SoloModule")

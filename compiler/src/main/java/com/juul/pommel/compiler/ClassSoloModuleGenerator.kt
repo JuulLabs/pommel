@@ -99,9 +99,7 @@ internal class ClassSoloModuleGenerator : SoloModuleGenerator {
     }
 
     private fun writeProvidesMethod(pommelModule: PommelModule): MethodSpec {
-        return MethodSpec.methodBuilder(
-            pommelModule.targetType.rawClassName().provideFunctionName()
-        )
+        return MethodSpec.methodBuilder(pommelModule.targetType.rawClassName().provideFunctionName())
             .addAnnotation(provides)
             .apply { if (pommelModule.scope != null) addAnnotation(pommelModule.scope) }
             .apply { if (pommelModule.qualifier != null) addAnnotation(pommelModule.qualifier) }

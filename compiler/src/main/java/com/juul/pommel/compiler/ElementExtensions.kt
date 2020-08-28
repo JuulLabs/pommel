@@ -33,9 +33,8 @@ internal fun Element.toSoloModuleParams(): SoloModuleParams {
     val soloModule = checkNotNull(getAnnotation(SoloModule::class.java))
     val component = checkNotNull(getTypeMirror { soloModule.installIn }).toTypeName()
     val typeName = checkNotNull(getTypeMirror { soloModule.bindingClass }).toTypeName()
-    // Calling toTypeName() on a function will throw an IllegalArgumentException since a developer can
-    // directly specify the return type of a function directly, you can ignore this annotation parameter
-    // better to call element.returnType to get the return value of a function
+    // Check if the current element is either a Class or Function
+    // in order to get the appropriate return value of the element
     val bindingType = when {
         typeName.toString() == JAVA_VOID && this.kind == ElementKind.CLASS -> this.asType().toTypeName()
         typeName.toString() == JAVA_VOID && this.kind == ElementKind.METHOD -> (this as ExecutableElement).returnType.toTypeName()
