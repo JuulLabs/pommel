@@ -1037,7 +1037,7 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
 
           class SampleClass : TestInterface
           
-          @SoloModule(TestInterface::class, SingletonComponent::class)
+          @SoloModule(installIn = SingletonComponent::class, bindingClass = TestInterface::class)
           fun sampleClass() = SampleClass()
 
           """

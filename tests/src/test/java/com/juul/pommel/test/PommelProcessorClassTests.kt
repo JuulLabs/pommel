@@ -575,7 +575,7 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           
           abstract class AbstractClass
           
-          @SoloModule(AbstractClass::class, SingletonComponent::class)
+          @SoloModule(installIn = SingletonComponent::class, bindingClass = AbstractClass::class)
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a") val a: Int,
@@ -628,7 +628,7 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           
           interface TestInterface
           
-          @SoloModule(TestInterface::class, SingletonComponent::class)
+          @SoloModule(installIn = SingletonComponent::class, bindingClass = TestInterface::class)
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a" ) val a: Int,
@@ -683,7 +683,7 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           
           interface SecondTestInterface
           
-          @SoloModule(SecondTestInterface::class, SingletonComponent::class)
+          @SoloModule(installIn = SingletonComponent::class, bindingClass = SecondTestInterface::class)
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a" ) val a: Int,
@@ -928,7 +928,7 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           
           abstract class AbstractClass
           
-          @SoloModule(AbstractClass::class, installIn = SingletonComponent::class)
+          @SoloModule(installIn = SingletonComponent::class, bindingClass = AbstractClass::class)
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a" ) val a: Int,
@@ -1106,7 +1106,7 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           
           interface TestInterface
           
-          @SoloModule(TestInterface::class, SingletonComponent::class)
+          @SoloModule(installIn = SingletonComponent::class, bindingClass = TestInterface::class)
           @Singleton
           @Named("test")
           class SampleClass @Inject constructor(

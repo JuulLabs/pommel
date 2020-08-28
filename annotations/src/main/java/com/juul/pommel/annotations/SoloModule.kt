@@ -5,6 +5,6 @@ import kotlin.reflect.KClass
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER)
 @Retention(AnnotationRetention.BINARY)
 annotation class SoloModule(
-    val bindingClass: KClass<*> = Nothing::class,
-    val installIn: KClass<*>
+    val installIn: KClass<*>,
+    val bindingClass: KClass<*> = Nothing::class
 )
