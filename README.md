@@ -95,7 +95,7 @@ If your class extends an `abstract class` or `interface`, you can specify to bin
 ```kotlin
 interface MyInterface
 
-@SoloModule(MyInterface::class, SingletonComponent::class)
+@SoloModule(installIn = SingletonComponent::class, bindingClass = MyInterface::class)
 @Singleton
 class SampleClass @Inject constructor(
     @Named("a") val a: Int,
@@ -120,7 +120,7 @@ You can annotate your class with a qualifier:
 ```kotlin
 interface MyInterface
 
-@SoloModule(MyInterface::class, SingletonComponent::class)
+@SoloModule(installIn = SingletonComponent::class, bindingClass = MyInterface::class)
 @Singleton
 @Named("sample")
 class SampleClass @Inject constructor(
@@ -312,7 +312,7 @@ constructor annotated with `@Inject`. All parameters passed into the constructor
 Pommel expects all functions annotated with `@SoloModule` to be `static` due to the fact that the generated module needs to call the annotated function.
 As a result Pommel only supports top level functions and functions that are enclosed in an `object` or `companion` class
 
-Pommel was designed to be used with Dagger-Hilt as result it expects a component to be passed into the `installIn` parameter. The component passed into `installIn`  follows the same limitation of Dagger-Hilt.
+Pommel was designed to be used with Dagger-Hilt so it expects a component to be passed into the `installIn` parameter. The component passed into `installIn`  follows the same limitations imposed by Dagger-Hilt.
 The component must be one of the predefined Dagger-Hilt components or a custom component annotated with `DefineComponent`. If there is a need to not install a generated `SoloModule` please file a GitHub issue.
 
 # Download
