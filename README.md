@@ -38,8 +38,10 @@ boilerplate since dependencies using constructor injection do not need to be dec
 
 ## Class
 
+Pommel expects you to install the generated module into a component:
+
 ```kotlin
-@SoloModule
+@SoloModule(installIn = SingletonComponent::class)
 @Singleton
 class SampleClass @Inject constructor(
     @Named("a") val a: Int,
@@ -61,37 +63,12 @@ public abstract class SampleClass_SoloModule {
 }
 ```
 
-If you are using Dagger-Hilt Pommel will automatically install the module into the correct component. Pommel currently does not support custom
-components but you can disable installing into a component with the annotation parameter `install`:
-
-```kotlin
-@SoloModule(install = false)
-@Singleton
-class SampleClass @Inject constructor(
-    @Named("a") val a: Int,
-    val b: String
-)
-```
-
-Will generate the equivalent of:
-
-```java
-@Module
-public abstract class SampleClass_SoloModule {
-  @Provides
-  @Singleton
-  public static SampleClass provides_SampleClass(@Named("a") int a, String b) {
-    return new SampleClass(a, b);
-  }
-}
-```
-
 Pommel will always bind to the concrete implementation:
 
 ```kotlin
 interface MyInterface
 
-@SoloModule
+@SoloModule(installIn = SingletonComponent::class)
 @Singleton
 class SampleClass @Inject constructor(
     @Named("a") val a: Int,
@@ -118,7 +95,7 @@ If your class extends an `abstract class` or `interface`, you can specify to bin
 ```kotlin
 interface MyInterface
 
-@SoloModule(MyInterface::class)
+@SoloModule(installIn = SingletonComponent::class, bindingClass = MyInterface::class)
 @Singleton
 class SampleClass @Inject constructor(
     @Named("a") val a: Int,
@@ -143,7 +120,7 @@ You can annotate your class with a qualifier:
 ```kotlin
 interface MyInterface
 
-@SoloModule(MyInterface::class)
+@SoloModule(installIn = SingletonComponent::class, bindingClass = MyInterface::class)
 @Singleton
 @Named("sample")
 class SampleClass @Inject constructor(
@@ -167,9 +144,11 @@ public abstract class SampleClass_SoloModule {
 
 ## Functions
 
+Pommel expects you to install the generated module into a component:
+
 ```kotlin
 @Singleton
-@SoloModule
+@SoloModule(installIn = SingletonComponent::class)
 @Named("name")
 fun name(): String = "Pommel"
 ```
@@ -197,7 +176,7 @@ You can use `@file:JvmName` to change the name of the file.
 @file:JvmName("PommelFunctions")
 
 @Singleton
-@SoloModule
+@SoloModule(installIn = SingletonComponent::class)
 @Named("name")
 fun name(): String = "Pommel"
 ```
@@ -223,7 +202,7 @@ You can also use a top level `object` to hold your pommel functions.
 
 object Module {
     @Singleton
-    @SoloModule
+    @SoloModule(installIn = SingletonComponent::class)
     @Named("name")
     fun name(): String = "Pommel"
 }
@@ -249,7 +228,7 @@ You can enclose your functions in a `companion` object
 ```kotlin
 class MyClass private constructor () {
     companion object Factory {
-        @SoloModule
+        @SoloModule(installIn = SingletonComponent::class)
         fun create() = MyClass()
     }
 }
@@ -273,7 +252,7 @@ public abstract class MyClass_Factory_create_SoloModule {
 You annotate the getter of a backing field:
 
 ```kotlin
-@get:SoloModule
+@get:SoloModule(installIn = SingletonComponent::class)
 @Named("baseUrl")
 val baseUrl = "baseUrl"
 ```
@@ -298,7 +277,7 @@ public abstract class FileName_getBaseUrl_SoloModule {
 Pommel was intended to be used for testing with Dagger-Hilt. Simply mark the element you'd like to replace in test with `@SoloModule`, then uninstall the resulting generated module in your test to provide your own test implementation:
 
 ```kotlin
-@SoloModule
+@SoloModule(installIn = SingletonComponent::class)
 @Singleton
 class MyService @Inject constructor(
     @Named("a") val a: Int,
@@ -330,13 +309,11 @@ Reference the [Dagger-Hilt testing package](https://dagger.dev/hilt/testing) for
 Pommel expects `class`es annotated with `@SoloModule` to have a constructor that is is annotated with `@Inject`. Multiple constructors annotated with `@Inject` is not supported as Dagger itself only supports a single
 constructor annotated with `@Inject`. All parameters passed into the constructor must also be on the Dagger graph, as this is another expectation of Dagger constructor injection
 
-Pommel expects all functions annotated with `@SoloModule` to be `static` due to the fact the generated module needs to call the annotated function.
-As a result Pommel only supports top level functions and functions that are enclosed in a `object` or `companion` class
+Pommel expects all functions annotated with `@SoloModule` to be `static` due to the fact that the generated module needs to call the annotated function.
+As a result Pommel only supports top level functions and functions that are enclosed in an `object` or `companion` class
 
-Pommel will install your dependency into the correct component given the scope your dependency was annotated with. If you do not provide a scope to the dependency Pommel will by default install into the SingletonComponent.
-If you annotate your dependency with a custom scope you will get a compiler error as Pommel does currently not support being installed into a custom component.
-You can get around this current limitation by setting the `install` parameter to false and pommel will skip generating the `InstallIn` annotation on your module.
-The downside is you now have to manually include the generated module into your dagger graph rather the module being auto installed in for you.
+Pommel was designed to be used with Dagger-Hilt so it expects a component to be passed into the `installIn` parameter. The component passed into `installIn`  follows the same limitations imposed by Dagger-Hilt.
+The component must be one of the predefined Dagger-Hilt components or a custom component annotated with `DefineComponent`. If there is a need to not install a generated `SoloModule` please file a GitHub issue.
 
 # Download
 

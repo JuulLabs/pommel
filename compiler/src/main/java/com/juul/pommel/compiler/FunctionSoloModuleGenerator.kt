@@ -46,13 +46,14 @@ internal class FunctionSoloModuleGenerator : SoloModuleGenerator {
         // we can chain the other object classes
         // e.g. ObjectA.ObjectB.ObjectC.INSTANCE.baseUrl()
         while (enclosingElement.kind != ElementKind.PACKAGE) {
-            val metadata = if (enclosingElement.enclosingElement.kind != ElementKind.PACKAGE && !instanceAdded) {
-                KotlinMetadataFactory.create(enclosingElement, null)
-            } else {
-                // Kotlin Metadata annotation does not exist on a package
-                // simply ignore and move on
-                null
-            }
+            val metadata =
+                if (enclosingElement.enclosingElement.kind != ElementKind.PACKAGE && !instanceAdded) {
+                    KotlinMetadataFactory.create(enclosingElement, null)
+                } else {
+                    // Kotlin Metadata annotation does not exist on a package
+                    // simply ignore and move on
+                    null
+                }
             // do not add chained dot if this is the first iteration of the loop
             // you will end up with an extra chained dot at the end of the string
             val dot = if (name.isNotBlank()) "." else ""
@@ -81,15 +82,11 @@ internal class FunctionSoloModuleGenerator : SoloModuleGenerator {
                     .build()
             )
             .addAnnotation(module)
-            .apply {
-                if (pommelModule.install && pommelModule.component != null) {
-                    addAnnotation(
-                        AnnotationSpec.builder(installIn)
-                            .addMember("value", "\$T.\$L", pommelModule.component, "class")
-                            .build()
-                    )
-                }
-            }
+            .addAnnotation(
+                AnnotationSpec.builder(installIn)
+                    .addMember("value", "\$T.\$L", pommelModule.component, "class")
+                    .build()
+            )
             .addMethod(
                 MethodSpec.methodBuilder("provides_$funcName" + "_" + element.simpleName.toString())
                     .addAnnotation(provides)
@@ -102,7 +99,12 @@ internal class FunctionSoloModuleGenerator : SoloModuleGenerator {
                     }
                     .addStatement(
                         "return \$L(\n\$L)", fullFunctionName,
-                        pommelModule.parameters.map { parameter -> CodeBlock.of("\$N", parameter.simpleName) }.joinToCode(",\n")
+                        pommelModule.parameters.map { parameter ->
+                            CodeBlock.of(
+                                "\$N",
+                                parameter.simpleName
+                            )
+                        }.joinToCode(",\n")
                     )
                     .build()
             )
@@ -123,15 +125,14 @@ internal class FunctionSoloModuleGenerator : SoloModuleGenerator {
         }
 
         if (Modifier.STATIC !in element.modifiers && !metadata.isCompanionObjectClass() && !metadata.isObjectClass()) {
-            messager.error("Functions marked with @SoloModule must be top level or enclosed in an object or companion class", element)
+            messager.error(
+                "Functions marked with @SoloModule must be top level or enclosed in an object or companion class",
+                element
+            )
             valid = false
         }
 
         val soloModuleParams = element.toSoloModuleParams()
-        if (soloModuleParams.component == null && soloModuleParams.install) {
-            messager.error("@SoloModule does not support custom scopes--use Dagger-Hilt defined scopes or set install to false", element)
-            valid = false
-        }
 
         if (!valid) return null
 
@@ -142,7 +143,6 @@ internal class FunctionSoloModuleGenerator : SoloModuleGenerator {
             qualifier = soloModuleParams.qualifier,
             component = soloModuleParams.component,
             parameters = element.parameters,
-            install = soloModuleParams.install,
             returnType = soloModuleParams.bindingType
         )
     }

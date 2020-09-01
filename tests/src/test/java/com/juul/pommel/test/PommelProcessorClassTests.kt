@@ -17,9 +17,10 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           package test 
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
           import javax.inject.Inject 
           
-          @SoloModule
+          @SoloModule(installIn = SingletonComponent::class)
           class SampleClass @Inject constructor()
 
           """
@@ -52,58 +53,19 @@ class PommelProcessorClassTests : PommelProcessorTests() {
     }
 
     @Test
-    fun `install is false`() {
+    fun `install in SingletonComponent `() {
         val result = compile(
             SourceFile.kotlin(
                 "source.kt",
                 """
           package test 
           
-          import com.juul.pommel.annotations.SoloModule
-          import javax.inject.Inject 
-          
-          @SoloModule(install = false)
-          class SampleClass @Inject constructor()
-
-          """
-            )
-        )
-
-        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
-        val file = result.getGeneratedFile("SampleClass_SoloModule.java")
-        assertThat(file).isEqualToJava(
-            """
-         package test;
-         
-         import dagger.Module;
-         import dagger.Provides;
-         import javax.annotation.Generated;
-         
-         $GENERATED_ANNOTATION
-         @Module
-         public abstract class SampleClass_SoloModule {
-           @Provides
-           public static SampleClass provides_test_SampleClass() {
-             return new SampleClass(
-                 );
-           }
-         }"""
-        )
-    }
-
-    @Test
-    fun `install in Singleton scope `() {
-        val result = compile(
-            SourceFile.kotlin(
-                "source.kt",
-                """
-          package test 
-          
-          import com.juul.pommel.annotations.SoloModule
+          import com.juul.pommel.annotations.SoloModule 
+          import dagger.hilt.components.SingletonComponent
           import javax.inject.Inject
           import javax.inject.Singleton 
           
-          @SoloModule
+          @SoloModule(installIn = SingletonComponent::class)
           @Singleton
           class SampleClass @Inject constructor()
 
@@ -139,7 +101,7 @@ class PommelProcessorClassTests : PommelProcessorTests() {
     }
 
     @Test
-    fun `install in ActivityRetainedScoped`() {
+    fun `install in ActivityRetainedComponent`() {
         val result = compile(
             SourceFile.kotlin(
                 "source.kt",
@@ -148,9 +110,10 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           
           import com.juul.pommel.annotations.SoloModule
           import javax.inject.Inject
+          import dagger.hilt.android.components.ActivityRetainedComponent
           import dagger.hilt.android.scopes.ActivityRetainedScoped
           
-          @SoloModule
+          @SoloModule(installIn = ActivityRetainedComponent::class)
           @ActivityRetainedScoped
           class SampleClass @Inject constructor()
 
@@ -186,7 +149,7 @@ class PommelProcessorClassTests : PommelProcessorTests() {
     }
 
     @Test
-    fun `install in ActivityScoped`() {
+    fun `install in ActivityComponent`() {
         val result = compile(
             SourceFile.kotlin(
                 "source.kt",
@@ -194,10 +157,11 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           package test 
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.android.components.ActivityComponent
           import javax.inject.Inject
           import dagger.hilt.android.scopes.ActivityScoped
           
-          @SoloModule
+          @SoloModule(installIn = ActivityComponent::class)
           @ActivityScoped
           class SampleClass @Inject constructor()
 
@@ -233,7 +197,7 @@ class PommelProcessorClassTests : PommelProcessorTests() {
     }
 
     @Test
-    fun `install in FragmentScoped`() {
+    fun `install in FragmentComponent`() {
         val result = compile(
             SourceFile.kotlin(
                 "source.kt",
@@ -241,10 +205,11 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           package test 
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.android.components.FragmentComponent
           import javax.inject.Inject
           import dagger.hilt.android.scopes.FragmentScoped
           
-          @SoloModule
+          @SoloModule(installIn = FragmentComponent::class)
           @FragmentScoped
           class SampleClass @Inject constructor()
 
@@ -280,7 +245,7 @@ class PommelProcessorClassTests : PommelProcessorTests() {
     }
 
     @Test
-    fun `install in ServiceScoped`() {
+    fun `install in ServiceComponent`() {
         val result = compile(
             SourceFile.kotlin(
                 "source.kt",
@@ -289,9 +254,10 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           
           import com.juul.pommel.annotations.SoloModule
           import javax.inject.Inject
+          import dagger.hilt.android.components.ServiceComponent
           import dagger.hilt.android.scopes.ServiceScoped
           
-          @SoloModule
+          @SoloModule(installIn = ServiceComponent::class)
           @ServiceScoped
           class SampleClass @Inject constructor()
 
@@ -327,7 +293,7 @@ class PommelProcessorClassTests : PommelProcessorTests() {
     }
 
     @Test
-    fun `install in ViewScoped`() {
+    fun `install in ViewComponent`() {
         val result = compile(
             SourceFile.kotlin(
                 "source.kt",
@@ -335,10 +301,11 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           package test 
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.android.components.ViewComponent
           import javax.inject.Inject
           import dagger.hilt.android.scopes.ViewScoped
           
-          @SoloModule
+          @SoloModule(installIn = ViewComponent::class)
           @ViewScoped
           class SampleClass @Inject constructor()
 
@@ -374,36 +341,55 @@ class PommelProcessorClassTests : PommelProcessorTests() {
     }
 
     @Test
-    fun `custom scope fails`() {
+    fun `install in ViewWithFragmentComponent`() {
         val result = compile(
             SourceFile.kotlin(
                 "source.kt",
                 """
           package test 
           
-        
-          
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.android.components.ViewWithFragmentComponent
           import javax.inject.Inject
-          import javax.inject.Scope
+          import dagger.hilt.android.scopes.ViewScoped
           
-          @Scope
-          annotation class CustomScope
-          
-          @SoloModule
-          @CustomScope
+          @SoloModule(installIn = ViewWithFragmentComponent::class)
+          @ViewScoped
           class SampleClass @Inject constructor()
 
           """
             )
         )
 
-        assertEquals(result.exitCode, KotlinCompilation.ExitCode.COMPILATION_ERROR)
-        assertThat(result.messages).contains("error: @SoloModule does not support custom scopes--use Dagger-Hilt defined scopes or set install to false")
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("SampleClass_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+
+         import dagger.Module;
+         import dagger.Provides;
+         import dagger.hilt.InstallIn;
+         import dagger.hilt.android.components.ViewWithFragmentComponent;
+         import dagger.hilt.android.scopes.ViewScoped;
+         import javax.annotation.Generated;
+         
+         $GENERATED_ANNOTATION
+         @Module
+         @InstallIn(ViewWithFragmentComponent.class)
+         public abstract class SampleClass_SoloModule {
+           @Provides
+           @ViewScoped
+           public static SampleClass provides_test_SampleClass() {
+             return new SampleClass(
+                 );
+           }
+         }"""
+        )
     }
 
     @Test
-    fun `custom scope with install false`() {
+    fun `Install in custom component`() {
         val result = compile(
             SourceFile.kotlin(
                 "source.kt",
@@ -413,13 +399,19 @@ class PommelProcessorClassTests : PommelProcessorTests() {
         
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
+          import dagger.hilt.DefineComponent
           import javax.inject.Inject
           import javax.inject.Scope
           
           @Scope
           annotation class CustomScope
           
-          @SoloModule(install = false)
+          @CustomScope
+          @DefineComponent(parent = SingletonComponent::class) 
+          interface MyCustomComponent
+          
+          @SoloModule(installIn = MyCustomComponent::class)
           @CustomScope
           class SampleClass @Inject constructor()
 
@@ -435,10 +427,12 @@ class PommelProcessorClassTests : PommelProcessorTests() {
 
          import dagger.Module;
          import dagger.Provides;
+         import dagger.hilt.InstallIn;
          import javax.annotation.Generated;
-
+         
          $GENERATED_ANNOTATION
          @Module
+         @InstallIn(MyCustomComponent.class)
          public abstract class SampleClass_SoloModule {
            @Provides
            @CustomScope
@@ -459,10 +453,11 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           package test 
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
           import javax.inject.Inject
           import javax.inject.Singleton 
           
-          @SoloModule
+          @SoloModule(installIn = SingletonComponent::class)
           @Singleton
           class SampleClass @Inject constructor(
               val a: Int,
@@ -513,11 +508,12 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           package test 
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
           import javax.inject.Inject
           import javax.inject.Named
           import javax.inject.Singleton 
           
-          @SoloModule
+          @SoloModule(installIn = SingletonComponent::class)
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a" ) val a: Int,
@@ -572,13 +568,14 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           package test 
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
           import javax.inject.Inject
           import javax.inject.Named
           import javax.inject.Singleton 
           
           abstract class AbstractClass
           
-          @SoloModule(AbstractClass::class)
+          @SoloModule(installIn = SingletonComponent::class, bindingClass = AbstractClass::class)
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a") val a: Int,
@@ -624,13 +621,14 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           package test 
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
           import javax.inject.Inject
           import javax.inject.Named
           import javax.inject.Singleton 
           
           interface TestInterface
           
-          @SoloModule(TestInterface::class)
+          @SoloModule(installIn = SingletonComponent::class, bindingClass = TestInterface::class)
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a" ) val a: Int,
@@ -676,6 +674,7 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           package test 
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
           import javax.inject.Inject
           import javax.inject.Named
           import javax.inject.Singleton 
@@ -684,7 +683,7 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           
           interface SecondTestInterface
           
-          @SoloModule(SecondTestInterface::class)
+          @SoloModule(installIn = SingletonComponent::class, bindingClass = SecondTestInterface::class)
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a" ) val a: Int,
@@ -730,13 +729,14 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           package test 
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
           import javax.inject.Inject
           import javax.inject.Named
           import javax.inject.Singleton 
           
           interface TestInterface
           
-          @SoloModule
+          @SoloModule(installIn = SingletonComponent::class)
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a" ) val a: Int,
@@ -791,6 +791,7 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           package test 
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
           import javax.inject.Inject
           import javax.inject.Named
           import javax.inject.Singleton 
@@ -799,7 +800,7 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           
           interface OtherInterface
           
-          @SoloModule
+          @SoloModule(installIn = SingletonComponent::class)
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a" ) val a: Int,
@@ -854,6 +855,7 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           package test 
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
           import javax.inject.Inject
           import javax.inject.Named
           import javax.inject.Singleton 
@@ -862,7 +864,7 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           
           abstract class AbstractClass
           
-          @SoloModule
+          @SoloModule(installIn = SingletonComponent::class)
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a" ) val a: Int,
@@ -917,6 +919,7 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           package test 
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
           import javax.inject.Inject
           import javax.inject.Named
           import javax.inject.Singleton 
@@ -925,7 +928,7 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           
           abstract class AbstractClass
           
-          @SoloModule(AbstractClass::class)
+          @SoloModule(installIn = SingletonComponent::class, bindingClass = AbstractClass::class)
           @Singleton
           class SampleClass @Inject constructor(
               @Named("a" ) val a: Int,
@@ -971,9 +974,10 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           package test 
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
           import javax.inject.Inject 
           
-          @SoloModule
+          @SoloModule(installIn = SingletonComponent::class)
           private class SampleClass @Inject constructor()
 
           """
@@ -993,11 +997,12 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           package test 
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
           import javax.inject.Inject 
           
           class SampleClass {
               
-              @SoloModule
+              @SoloModule(installIn = SingletonComponent::class)
               inner class InnerClass @Inject constructor()
           }
 
@@ -1018,11 +1023,12 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           package test 
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
           import javax.inject.Inject 
           
           class SampleClass {
               
-              @SoloModule
+              @SoloModule(installIn = SingletonComponent::class)
               class InnerClass @Inject constructor()
           }
 
@@ -1066,14 +1072,11 @@ class PommelProcessorClassTests : PommelProcessorTests() {
         
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
           import javax.inject.Inject
           import javax.inject.Scope
-          
-          @Scope
-          annotation class CustomScope
-          
-          @SoloModule
-          @CustomScope
+
+          @SoloModule(installIn = SingletonComponent::class)
           class SampleClass @Inject constructor(private val a: Int) {
               
               @Inject constructor(): this(10) 
@@ -1096,13 +1099,14 @@ class PommelProcessorClassTests : PommelProcessorTests() {
           package test 
           
           import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
           import javax.inject.Inject
           import javax.inject.Named
           import javax.inject.Singleton 
           
           interface TestInterface
           
-          @SoloModule(TestInterface::class)
+          @SoloModule(installIn = SingletonComponent::class, bindingClass = TestInterface::class)
           @Singleton
           @Named("test")
           class SampleClass @Inject constructor(

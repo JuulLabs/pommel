@@ -30,15 +30,11 @@ internal class ClassSoloModuleGenerator : SoloModuleGenerator {
                     .build()
             )
             .addAnnotation(module)
-            .apply {
-                if (pommelModule.install && pommelModule.component != null) {
-                    addAnnotation(
-                        AnnotationSpec.builder(installIn)
-                            .addMember("value", "\$T.\$L", pommelModule.component, "class")
-                            .build()
-                    )
-                }
-            }
+            .addAnnotation(
+                AnnotationSpec.builder(installIn)
+                    .addMember("value", "\$T.\$L", pommelModule.component, "class")
+                    .build()
+            )
             .addMethod(
                 // if the value of returnType is equal to the target class annotated with @SoloModule
                 // then we generate a provides method otherwise the value of the target class is a
@@ -88,10 +84,6 @@ internal class ClassSoloModuleGenerator : SoloModuleGenerator {
         }
 
         val soloModuleParams = element.toSoloModuleParams()
-        if (soloModuleParams.component == null && soloModuleParams.install) {
-            messager.error("@SoloModule does not support custom scopes--use Dagger-Hilt defined scopes or set install to false", element)
-            valid = false
-        }
 
         if (!valid) return null
 
@@ -102,7 +94,6 @@ internal class ClassSoloModuleGenerator : SoloModuleGenerator {
             qualifier = soloModuleParams.qualifier,
             component = soloModuleParams.component,
             parameters = constructor.parameters,
-            install = soloModuleParams.install,
             returnType = soloModuleParams.bindingType
         )
     }
@@ -131,7 +122,10 @@ internal class ClassSoloModuleGenerator : SoloModuleGenerator {
             .apply { if (pommelModule.qualifier != null) addAnnotation(pommelModule.qualifier) }
             .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
             .returns(pommelModule.returnType)
-            .addParameter(pommelModule.targetType, pommelModule.targetType.rawClassName().simpleName().decapitalize())
+            .addParameter(
+                pommelModule.targetType,
+                pommelModule.targetType.rawClassName().simpleName().decapitalize()
+            )
             .build()
     }
 
