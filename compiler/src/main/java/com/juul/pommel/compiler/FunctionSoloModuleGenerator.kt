@@ -133,7 +133,6 @@ internal class FunctionSoloModuleGenerator : SoloModuleGenerator {
         }
 
         val soloModuleParams = element.toSoloModuleParams()
-        soloModuleParams.component.annotations
 
         if (!valid) return null
 
