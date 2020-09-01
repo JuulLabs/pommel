@@ -1146,7 +1146,6 @@ class PommelProcessorClassTests : PommelProcessorTests() {
         )
     }
 
-
     @Test
     fun `class with generic parameter`() {
         val result = compile(
