@@ -58,6 +58,13 @@ buildscript {
 
 apply plugin: 'binary-compatibility-validator'
 
+apiValidation {
+    /**
+     * Sub-projects that are excluded from API validation
+     */
+    ignoredProjects += ["compiler", "tests", "sample"]
+}
+
 subprojects {
     repositories {
         google()
