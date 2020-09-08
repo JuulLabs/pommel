@@ -1,0 +1,5 @@
+public abstract interface annotation class com/juul/pommel/annotations/SoloModule : java/lang/annotation/Annotation {
+	public abstract fun bindingClass ()Ljava/lang/Class;
+	public abstract fun installIn ()Ljava/lang/Class;
+}
+
