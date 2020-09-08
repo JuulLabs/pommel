@@ -1,6 +1,6 @@
 package com.juul.pommel.compiler.kotlin
 
-import com.juul.pommel.compiler.warn
+import com.juul.pommel.compiler.extensions.warn
 import kotlinx.metadata.ClassName
 import kotlinx.metadata.Flag
 import kotlinx.metadata.Flags

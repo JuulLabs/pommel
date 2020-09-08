@@ -1,5 +1,6 @@
-package com.juul.pommel.compiler
+package com.juul.pommel.compiler.extensions
 
+import com.juul.pommel.compiler.utils.cast
 import javax.lang.model.AnnotatedConstruct
 import javax.lang.model.element.TypeElement
 

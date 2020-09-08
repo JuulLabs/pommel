@@ -2,6 +2,8 @@ package com.juul.pommel.compiler
 
 import com.google.auto.service.AutoService
 import com.juul.pommel.annotations.SoloModule
+import com.juul.pommel.compiler.extensions.getElementsAnnotatedWith
+import com.juul.pommel.compiler.generator.getCodeGenerator
 import net.ltgt.gradle.incap.IncrementalAnnotationProcessor
 import net.ltgt.gradle.incap.IncrementalAnnotationProcessorType
 import javax.annotation.processing.AbstractProcessor

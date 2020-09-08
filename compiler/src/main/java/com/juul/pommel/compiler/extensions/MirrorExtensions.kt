@@ -1,4 +1,4 @@
-package com.juul.pommel.compiler
+package com.juul.pommel.compiler.extensions
 
 import com.squareup.javapoet.TypeName
 import javax.lang.model.type.MirroredTypeException

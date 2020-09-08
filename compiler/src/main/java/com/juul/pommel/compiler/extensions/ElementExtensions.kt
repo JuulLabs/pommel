@@ -1,6 +1,10 @@
-package com.juul.pommel.compiler
+package com.juul.pommel.compiler.extensions
 
 import com.juul.pommel.annotations.SoloModule
+import com.juul.pommel.compiler.SoloModuleParams
+import com.juul.pommel.compiler.utils.JAVA_VOID
+import com.juul.pommel.compiler.utils.QUALIFIER_ANNOTATION
+import com.juul.pommel.compiler.utils.SCOPE_ANNOTATION
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.TypeName

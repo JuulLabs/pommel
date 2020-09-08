@@ -1,4 +1,4 @@
-package com.juul.pommel.compiler
+package com.juul.pommel.compiler.utils
 
 internal const val SCOPE_ANNOTATION: String = "javax.inject.Scope"
 internal const val INJECT_ANNOTATION: String = "javax.inject.Inject"

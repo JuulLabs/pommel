@@ -1,4 +1,4 @@
-package com.juul.pommel.compiler
+package com.juul.pommel.compiler.extensions
 
 import javax.annotation.processing.Messager
 import javax.annotation.processing.RoundEnvironment

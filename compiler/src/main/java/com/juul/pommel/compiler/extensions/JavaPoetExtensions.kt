@@ -1,4 +1,4 @@
-package com.juul.pommel.compiler
+package com.juul.pommel.compiler.extensions
 
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock

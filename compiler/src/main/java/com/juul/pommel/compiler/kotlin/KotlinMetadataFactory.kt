@@ -1,7 +1,7 @@
 package com.juul.pommel.compiler.kotlin
 
-import com.juul.pommel.compiler.METADATA_ANNOTATION
-import com.juul.pommel.compiler.hasAnnotation
+import com.juul.pommel.compiler.extensions.hasAnnotation
+import com.juul.pommel.compiler.utils.METADATA_ANNOTATION
 import javax.annotation.processing.Messager
 import javax.lang.model.element.Element
 

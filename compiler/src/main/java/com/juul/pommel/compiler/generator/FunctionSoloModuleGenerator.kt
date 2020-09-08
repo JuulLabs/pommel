@@ -1,6 +1,20 @@
-package com.juul.pommel.compiler
+package com.juul.pommel.compiler.generator
 
+import com.juul.pommel.compiler.PommelModule
+import com.juul.pommel.compiler.PommelProcessor
+import com.juul.pommel.compiler.extensions.error
+import com.juul.pommel.compiler.extensions.joinToCode
+import com.juul.pommel.compiler.extensions.qualifiedType
+import com.juul.pommel.compiler.extensions.rawClassName
+import com.juul.pommel.compiler.extensions.toClassName
+import com.juul.pommel.compiler.extensions.toSoloModuleParams
+import com.juul.pommel.compiler.extensions.toTypeName
 import com.juul.pommel.compiler.kotlin.KotlinMetadataFactory
+import com.juul.pommel.compiler.utils.applyEach
+import com.juul.pommel.compiler.utils.generated
+import com.juul.pommel.compiler.utils.installIn
+import com.juul.pommel.compiler.utils.module
+import com.juul.pommel.compiler.utils.provides
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.JavaFile
@@ -46,14 +60,13 @@ internal class FunctionSoloModuleGenerator : SoloModuleGenerator {
         // we can chain the other object classes
         // e.g. ObjectA.ObjectB.ObjectC.INSTANCE.baseUrl()
         while (enclosingElement.kind != ElementKind.PACKAGE) {
-            val metadata =
-                if (enclosingElement.enclosingElement.kind != ElementKind.PACKAGE && !instanceAdded) {
-                    KotlinMetadataFactory.create(enclosingElement, null)
-                } else {
-                    // Kotlin Metadata annotation does not exist on a package
-                    // simply ignore and move on
-                    null
-                }
+            val metadata = if (enclosingElement.enclosingElement.kind != ElementKind.PACKAGE && !instanceAdded) {
+                KotlinMetadataFactory.create(enclosingElement, null)
+            } else {
+                // Kotlin Metadata annotation does not exist on a package
+                // simply ignore and move on
+                null
+            }
             // do not add chained dot if this is the first iteration of the loop
             // you will end up with an extra chained dot at the end of the string
             val dot = if (name.isNotBlank()) "." else ""

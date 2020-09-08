@@ -1,5 +1,24 @@
-package com.juul.pommel.compiler
+package com.juul.pommel.compiler.generator
 
+import com.juul.pommel.compiler.PommelModule
+import com.juul.pommel.compiler.PommelProcessor
+import com.juul.pommel.compiler.extensions.error
+import com.juul.pommel.compiler.extensions.hasAnnotation
+import com.juul.pommel.compiler.extensions.joinToCode
+import com.juul.pommel.compiler.extensions.qualifiedType
+import com.juul.pommel.compiler.extensions.rawClassName
+import com.juul.pommel.compiler.extensions.soloModuleName
+import com.juul.pommel.compiler.extensions.toClassName
+import com.juul.pommel.compiler.extensions.toSoloModuleParams
+import com.juul.pommel.compiler.extensions.toTypeName
+import com.juul.pommel.compiler.utils.INJECT_ANNOTATION
+import com.juul.pommel.compiler.utils.applyEach
+import com.juul.pommel.compiler.utils.binds
+import com.juul.pommel.compiler.utils.castEach
+import com.juul.pommel.compiler.utils.generated
+import com.juul.pommel.compiler.utils.installIn
+import com.juul.pommel.compiler.utils.module
+import com.juul.pommel.compiler.utils.provides
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock

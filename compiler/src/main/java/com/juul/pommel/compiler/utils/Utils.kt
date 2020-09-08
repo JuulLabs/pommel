@@ -1,4 +1,4 @@
-package com.juul.pommel.compiler
+package com.juul.pommel.compiler.utils
 
 /** Equivalent to `this as T` for use in function chains. */
 @Suppress("UNCHECKED_CAST", "NOTHING_TO_INLINE")

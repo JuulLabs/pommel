@@ -1,5 +1,6 @@
-package com.juul.pommel.compiler
+package com.juul.pommel.compiler.generator
 
+import com.juul.pommel.compiler.PommelModule
 import com.squareup.javapoet.JavaFile
 import javax.annotation.processing.Messager
 import javax.lang.model.element.Element
