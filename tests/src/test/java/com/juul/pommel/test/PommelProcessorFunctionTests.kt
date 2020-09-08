@@ -1123,4 +1123,118 @@ class PommelProcessorFunctionTests : PommelProcessorTests() {
          }"""
         )
     }
+
+    @Test
+    fun `function with generic return type`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+
+          import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
+          import javax.inject.Inject
+          import javax.inject.Named
+          import javax.inject.Scope
+          
+          interface TestInterface<T>
+
+          class SampleClass : TestInterface<String>
+          
+          @SoloModule(installIn = SingletonComponent::class)
+          @Named("sample")
+          fun sampleClass(): TestInterface<String> {
+             return SampleClass()
+          }
+
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("SourceKt_sampleClass_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+
+         import dagger.Module;
+         import dagger.Provides;
+         import dagger.hilt.InstallIn;
+         import dagger.hilt.components.SingletonComponent;
+         import java.lang.String;
+         import javax.annotation.Generated;
+         import javax.inject.Named;
+         
+         $GENERATED_ANNOTATION
+         @Module
+         @InstallIn(SingletonComponent.class)
+         public abstract class SourceKt_sampleClass_SoloModule {
+           @Provides
+           @Named("sample")
+           public static TestInterface<String> provides_test_SourceKt_sampleClass() {
+             return SourceKt.sampleClass(
+                 );
+           }
+         }"""
+        )
+    }
+
+    @Test
+    fun `function with generic parameter`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+
+          import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
+          import javax.inject.Inject
+          import javax.inject.Named
+          import javax.inject.Scope
+          
+          interface TestInterface<T>
+
+          class SampleClass(private val list: List<Int>) : TestInterface<String>
+          
+          @SoloModule(installIn = SingletonComponent::class)
+          @Named("sample")
+          fun sampleClass(list: List<Int>): TestInterface<String> {
+             return SampleClass(list)
+          }
+
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("SourceKt_sampleClass_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+
+         import dagger.Module;
+         import dagger.Provides;
+         import dagger.hilt.InstallIn;
+         import dagger.hilt.components.SingletonComponent;
+         import java.lang.Integer;
+         import java.lang.String;
+         import java.util.List;
+         import javax.annotation.Generated;
+         import javax.inject.Named;
+         
+         $GENERATED_ANNOTATION
+         @Module
+         @InstallIn(SingletonComponent.class)
+         public abstract class SourceKt_sampleClass_SoloModule {
+           @Provides
+           @Named("sample")
+           public static TestInterface<String> provides_test_SourceKt_sampleClass(List<Integer> list) {
+             return SourceKt.sampleClass(
+                 list);
+           }
+         }"""
+        )
+    }
 }

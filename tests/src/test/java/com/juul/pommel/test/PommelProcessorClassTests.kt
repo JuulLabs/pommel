@@ -1145,4 +1145,52 @@ class PommelProcessorClassTests : PommelProcessorTests() {
          }"""
         )
     }
+
+    @Test
+    fun `class with generic parameter`() {
+        val result = compile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+          package test 
+          
+          import com.juul.pommel.annotations.SoloModule
+          import dagger.hilt.components.SingletonComponent
+          import javax.inject.Inject
+          import javax.inject.Named 
+          
+          
+          @SoloModule(installIn = SingletonComponent::class)
+          class SampleClass @Inject constructor(private val list: List<String>)
+
+          """
+            )
+        )
+
+        assertEquals(result.exitCode, KotlinCompilation.ExitCode.OK)
+        val file = result.getGeneratedFile("SampleClass_SoloModule.java")
+        assertThat(file).isEqualToJava(
+            """
+         package test;
+         
+         import dagger.Module;
+         import dagger.Provides;
+         import dagger.hilt.InstallIn;
+         import dagger.hilt.components.SingletonComponent;
+         import java.lang.String;
+         import java.util.List;
+         import javax.annotation.Generated;
+         
+         $GENERATED_ANNOTATION
+         @Module
+         @InstallIn(SingletonComponent.class)
+         public abstract class SampleClass_SoloModule {
+           @Provides
+           public static SampleClass provides_test_SampleClass(List<String> list) {
+             return new SampleClass(
+                 list);
+           }
+         }"""
+        )
+    }
 }
