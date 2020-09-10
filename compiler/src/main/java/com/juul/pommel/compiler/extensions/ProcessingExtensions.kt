@@ -13,6 +13,6 @@ internal fun Messager.error(message: String, element: Element? = null) {
     printMessage(Diagnostic.Kind.ERROR, message, element)
 }
 
-internal fun Messager.warn(message: String, element: Element? = null) {
-    printMessage(Diagnostic.Kind.WARNING, message, element)
+internal fun Messager.note(message: String, element: Element? = null) {
+    printMessage(Diagnostic.Kind.NOTE, message, element)
 }

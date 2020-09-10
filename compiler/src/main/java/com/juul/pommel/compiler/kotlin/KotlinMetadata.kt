@@ -1,6 +1,6 @@
 package com.juul.pommel.compiler.kotlin
 
-import com.juul.pommel.compiler.extensions.warn
+import com.juul.pommel.compiler.extensions.note
 import kotlinx.metadata.ClassName
 import kotlinx.metadata.Flag
 import kotlinx.metadata.Flags
@@ -25,7 +25,7 @@ internal class KotlinMetadata private constructor(private val flags: Flags) {
             val visitor = MetadataVisitor()
             when (val classMetadata = metadataOf(element)) {
                 is KotlinClassMetadata.Class -> classMetadata.accept(visitor)
-                else -> messager?.warn("Unsupported metadata type: + $classMetadata", element)
+                else -> messager?.note("Unsupported metadata type: + $classMetadata", element)
             }
             return KotlinMetadata(visitor.classFlags)
         }
