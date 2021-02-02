@@ -1,3 +1,11 @@
+# Pommel has moved
+
+Pommel started as a project to enable our team to effectively use Dagger/Hilt in our test suites, but the team's needs have changed and we've migrated away from using Dagger/Hilt for our DI needs.
+
+**This project is now maintained at [KVelasco/pommel].**
+
+---
+
 # Pommel
 
 Pommel is an annotation processor for Dagger projects to generate a module with a single binding
@@ -348,4 +356,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+```
 
+
+[KVelasco/pommel]: https://github.com/KVelasco/pommel
